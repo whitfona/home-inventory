@@ -53,7 +53,7 @@ test('a box can be stored', function () {
         ]);
 
     $box = Box::first();
-
+    
     expect($box)
         ->name->toBe('Kitchen Supplies')
         ->description->toBe('Contains kitchen utensils and supplies')
@@ -79,7 +79,80 @@ test('description is optional when creating a box', function () {
     $response = $this->postJson('/boxes', $boxData);
 
     $response->assertStatus(201);
-
+    
     expect(Box::first())
         ->description->toBeNull();
+});
+
+test('a box can be updated', function () {
+    $box = Box::create([
+        'name' => 'Kitchen Supplies',
+        'description' => 'Contains kitchen utensils and supplies',
+        'location' => 'Kitchen Cabinet'
+    ]);
+
+    $response = $this->putJson("/boxes/{$box->id}", [
+        'name' => 'Updated Kitchen Supplies',
+        'description' => 'Updated description',
+        'location' => 'Updated location'
+    ]);
+
+    $response->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'Updated Kitchen Supplies',
+                'description' => 'Updated description',
+                'location' => 'Updated location'
+            ]
+        ]);
+
+    expect($box->fresh())
+        ->name->toBe('Updated Kitchen Supplies')
+        ->description->toBe('Updated description')
+        ->location->toBe('Updated location');
+});
+
+test('only name, description and location can be updated on a box', function () {
+    $box = Box::create([
+        'name' => 'Kitchen Supplies',
+        'description' => 'Contains kitchen utensils and supplies',
+        'location' => 'Kitchen Cabinet'
+    ]);
+
+    $originalCreatedAt = $box->created_at;
+    $originalId = $box->id;
+
+    $response = $this->putJson("/boxes/{$box->id}", [
+        'id' => 999,
+        'name' => 'Updated Kitchen Supplies',
+        'description' => 'Updated description',
+        'location' => 'Updated location',
+        'created_at' => now()->addDay()
+    ]);
+
+    $response->assertStatus(200);
+
+    $box->refresh();
+    
+    expect($box)
+        ->name->toBe('Updated Kitchen Supplies')
+        ->description->toBe('Updated description')
+        ->location->toBe('Updated location')
+        ->id->toBe($originalId)
+        ->created_at->toEqual($originalCreatedAt);
+});
+
+test('name and location are required when updating a box', function () {
+    $box = Box::create([
+        'name' => 'Kitchen Supplies',
+        'description' => 'Contains kitchen utensils and supplies',
+        'location' => 'Kitchen Cabinet'
+    ]);
+
+    $response = $this->putJson("/boxes/{$box->id}", [
+        'description' => 'Updated description'
+    ]);
+
+    $response->assertStatus(422)
+        ->assertJsonValidationErrors(['name', 'location']);
 });

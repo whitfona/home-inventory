@@ -29,5 +29,6 @@ Route::post('/api/boxes', [BoxController::class, 'store']);
 
 Route::get('/boxes', [BoxController::class, 'index']);
 Route::post('/boxes', [BoxController::class, 'store']);
+Route::put('/boxes/{box}', [BoxController::class, 'update']);
 
 require __DIR__.'/auth.php';

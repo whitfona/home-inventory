@@ -30,4 +30,19 @@ class BoxController extends Controller
             'data' => $box
         ], 201);
     }
+
+    public function update(Request $request, Box $box)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'location' => 'required|string|max:255',
+        ]);
+
+        $box->update($validated);
+
+        return response()->json([
+            'data' => $box
+        ]);
+    }
 }
