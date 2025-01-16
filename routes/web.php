@@ -25,11 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::post('/api/boxes', [BoxController::class, 'store']);
-
-Route::get('/boxes', [BoxController::class, 'index']);
-Route::post('/boxes', [BoxController::class, 'store']);
-Route::put('/boxes/{box}', [BoxController::class, 'update']);
-Route::delete('/boxes/{box}', [BoxController::class, 'destroy']);
+Route::prefix('api')->group(function () {
+    Route::get('/boxes', [BoxController::class, 'index']);
+    Route::post('/boxes', [BoxController::class, 'store']);
+    Route::put('/boxes/{box}', [BoxController::class, 'update']);
+    Route::delete('/boxes/{box}', [BoxController::class, 'destroy']);
+});
 
 require __DIR__.'/auth.php';

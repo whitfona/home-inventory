@@ -15,7 +15,7 @@ test('all boxes can be retrieved', function() {
         'location' => 'Garage'
     ]);
 
-    $response = $this->getJson('/boxes');
+    $response = $this->getJson('/api/boxes');
 
     $response->assertStatus(200)
         ->assertJson([
@@ -41,7 +41,7 @@ test('a box can be stored', function () {
         'location' => 'Kitchen Cabinet'
     ];
 
-    $response = $this->postJson('/boxes', $boxData);
+    $response = $this->postJson('/api/boxes', $boxData);
 
     $response->assertStatus(201)
         ->assertJson([
@@ -64,7 +64,7 @@ test('a box can be stored', function () {
 });
 
 test('name and location are required when creating a box', function () {
-    $response = $this->postJson('/boxes', []);
+    $response = $this->postJson('/api/boxes', []);
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['name', 'location']);
@@ -76,7 +76,7 @@ test('description is optional when creating a box', function () {
         'location' => 'Kitchen Cabinet'
     ];
 
-    $response = $this->postJson('/boxes', $boxData);
+    $response = $this->postJson('/api/boxes', $boxData);
 
     $response->assertStatus(201);
     
@@ -91,7 +91,7 @@ test('a box can be updated', function () {
         'location' => 'Kitchen Cabinet'
     ]);
 
-    $response = $this->putJson("/boxes/{$box->id}", [
+    $response = $this->putJson("/api/boxes/{$box->id}", [
         'name' => 'Updated Kitchen Supplies',
         'description' => 'Updated description',
         'location' => 'Updated location'
@@ -122,7 +122,7 @@ test('only name, description and location can be updated on a box', function () 
     $originalCreatedAt = $box->created_at;
     $originalId = $box->id;
 
-    $response = $this->putJson("/boxes/{$box->id}", [
+    $response = $this->putJson("/api/boxes/{$box->id}", [
         'id' => 999,
         'name' => 'Updated Kitchen Supplies',
         'description' => 'Updated description',
@@ -149,7 +149,7 @@ test('name and location are required when updating a box', function () {
         'location' => 'Kitchen Cabinet'
     ]);
 
-    $response = $this->putJson("/boxes/{$box->id}", [
+    $response = $this->putJson("/api/boxes/{$box->id}", [
         'description' => 'Updated description'
     ]);
 
@@ -164,7 +164,7 @@ test('a box can be deleted', function () {
         'location' => 'Kitchen Cabinet'
     ]);
 
-    $response = $this->deleteJson("/boxes/{$box->id}");
+    $response = $this->deleteJson("/api/boxes/{$box->id}");
 
     $response->assertStatus(204);
 
@@ -172,7 +172,7 @@ test('a box can be deleted', function () {
 });
 
 test('deleting a non-existent box returns a 404', function () {
-    $response = $this->deleteJson("/boxes/1");
+    $response = $this->deleteJson("/api/boxes/1");
 
     $response->assertStatus(404);
 });
