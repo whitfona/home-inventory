@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Box;
 use App\Http\Requests\StoreBoxRequest;
 use App\Http\Requests\UpdateBoxRequest;
+use Illuminate\Http\Response;
 
 class BoxController extends Controller
 {
@@ -14,7 +15,7 @@ class BoxController extends Controller
 
         return response()->json([
             'data' => $boxes
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function store(StoreBoxRequest $request)
@@ -23,7 +24,7 @@ class BoxController extends Controller
 
         return response()->json([
             'data' => $box
-        ], 201);
+        ], Response::HTTP_CREATED);
     }
 
     public function update(UpdateBoxRequest $request, Box $box)
@@ -32,13 +33,13 @@ class BoxController extends Controller
 
         return response()->json([
             'data' => $box
-        ]);
+        ], Response::HTTP_OK);
     }
 
     public function destroy(Box $box)
     {
         $box->delete();
 
-        return response()->noContent();
+        return response()->noContent(Response::HTTP_NO_CONTENT);
     }
 }
