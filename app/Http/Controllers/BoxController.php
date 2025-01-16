@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class BoxController extends Controller
 {
+    public function index()
+    {
+        $boxes = Box::all();
+
+        return response()->json([
+            'data' => $boxes
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

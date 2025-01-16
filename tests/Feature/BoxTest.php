@@ -2,6 +2,38 @@
 
 use App\Models\Box;
 
+test('all boxes can be retrieved', function() {
+    Box::create([
+        'name' => 'Kitchen Supplies',
+        'description' => 'Contains kitchen utensils and supplies',
+        'location' => 'Kitchen Cabinet'
+    ]);
+
+    Box::create([
+        'name' => 'Tools',
+        'description' => 'Contains various tools',
+        'location' => 'Garage'
+    ]);
+
+    $response = $this->getJson('/boxes');
+
+    $response->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                [
+                    'name' => 'Kitchen Supplies',
+                    'description' => 'Contains kitchen utensils and supplies',
+                    'location' => 'Kitchen Cabinet'
+                ],
+                [
+                    'name' => 'Tools',
+                    'description' => 'Contains various tools',
+                    'location' => 'Garage'
+                ]
+            ]
+        ]);
+});
+
 test('a box can be stored', function () {
     $boxData = [
         'name' => 'Kitchen Supplies',
@@ -9,7 +41,7 @@ test('a box can be stored', function () {
         'location' => 'Kitchen Cabinet'
     ];
 
-    $response = $this->postJson('/api/boxes', $boxData);
+    $response = $this->postJson('/boxes', $boxData);
 
     $response->assertStatus(201)
         ->assertJson([
@@ -32,7 +64,7 @@ test('a box can be stored', function () {
 });
 
 test('name and location are required when creating a box', function () {
-    $response = $this->postJson('/api/boxes', []);
+    $response = $this->postJson('/boxes', []);
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['name', 'location']);
@@ -44,7 +76,7 @@ test('description is optional when creating a box', function () {
         'location' => 'Kitchen Cabinet'
     ];
 
-    $response = $this->postJson('/api/boxes', $boxData);
+    $response = $this->postJson('/boxes', $boxData);
 
     $response->assertStatus(201);
 

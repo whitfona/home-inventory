@@ -27,4 +27,7 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/api/boxes', [BoxController::class, 'store']);
 
+Route::get('/boxes', [BoxController::class, 'index']);
+Route::post('/boxes', [BoxController::class, 'store']);
+
 require __DIR__.'/auth.php';
