@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Box;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreBoxRequest;
+use App\Http\Requests\UpdateBoxRequest;
 
 class BoxController extends Controller
 {
@@ -16,30 +17,18 @@ class BoxController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreBoxRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'location' => 'required|string|max:255',
-        ]);
-
-        $box = Box::create($validated);
+        $box = Box::create($request->validated());
 
         return response()->json([
             'data' => $box
         ], 201);
     }
 
-    public function update(Request $request, Box $box)
+    public function update(UpdateBoxRequest $request, Box $box)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'location' => 'required|string|max:255',
-        ]);
-
-        $box->update($validated);
+        $box->update($request->validated());
 
         return response()->json([
             'data' => $box
