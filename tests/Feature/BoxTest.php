@@ -156,3 +156,23 @@ test('name and location are required when updating a box', function () {
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['name', 'location']);
 });
+
+test('a box can be deleted', function () {
+    $box = Box::create([
+        'name' => 'Kitchen Supplies',
+        'description' => 'Contains kitchen utensils and supplies',
+        'location' => 'Kitchen Cabinet'
+    ]);
+
+    $response = $this->deleteJson("/boxes/{$box->id}");
+
+    $response->assertStatus(204);
+
+    expect(Box::count())->toBe(0);
+});
+
+test('deleting a non-existent box returns a 404', function () {
+    $response = $this->deleteJson("/boxes/1");
+
+    $response->assertStatus(404);
+});

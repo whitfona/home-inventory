@@ -45,4 +45,11 @@ class BoxController extends Controller
             'data' => $box
         ]);
     }
+
+    public function destroy(Box $box)
+    {
+        $box->delete();
+
+        return response()->noContent();
+    }
 }
