@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BoxController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +31,8 @@ Route::prefix('api')->group(function () {
     Route::post('/boxes', [BoxController::class, 'store']);
     Route::put('/boxes/{box}', [BoxController::class, 'update']);
     Route::delete('/boxes/{box}', [BoxController::class, 'destroy']);
+
+    Route::post('/items', [ItemController::class, 'store']);
 });
 
 require __DIR__.'/auth.php';

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Box;
+use App\Models\Item;
 use Illuminate\Http\Response;
 
 test('all boxes can be retrieved', function() {
@@ -145,4 +146,12 @@ test('deleting a non-existent box returns a 404', function () {
     $response = $this->deleteJson("/api/boxes/1");
 
     $response->assertStatus(Response::HTTP_NOT_FOUND);
+});
+
+test('a box can have many items', function () {
+    $box = Box::factory()->create();
+    Item::factory()->count(3)->create(['box_id' => $box->id]);
+
+    expect($box->items)->toHaveCount(3)
+        ->and($box->items->first())->toBeInstanceOf(Item::class);
 });

@@ -4,20 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Box extends Model
+class Item extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
         'description',
-        'location'
+        'photo_path',
+        'box_id'
     ];
 
-    public function items(): HasMany
+    public function box(): BelongsTo
     {
-        return $this->hasMany(Item::class);
+        return $this->belongsTo(Box::class);
     }
 }
