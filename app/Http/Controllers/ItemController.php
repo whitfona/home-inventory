@@ -16,4 +16,11 @@ class ItemController extends Controller
             'data' => $item
         ], Response::HTTP_CREATED);
     }
+
+    public function destroy(Item $item)
+    {
+        $item->delete();
+
+        return response()->noContent(Response::HTTP_NO_CONTENT);
+    }
 }

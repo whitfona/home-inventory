@@ -33,6 +33,7 @@ Route::prefix('api')->group(function () {
     Route::delete('/boxes/{box}', [BoxController::class, 'destroy']);
 
     Route::post('/items', [ItemController::class, 'store']);
+    Route::delete('/items/{item}', [ItemController::class, 'destroy']);
 });
 
 require __DIR__.'/auth.php';

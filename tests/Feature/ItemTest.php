@@ -83,3 +83,28 @@ test('description and photo_path are optional when creating an item', function (
         ->description->toBeNull()
         ->photo_path->toBeNull();
 });
+
+test('an item can be deleted', function () {
+    $item = Item::factory()->create();
+
+    $response = $this->deleteJson("/api/items/{$item->id}");
+
+    $response->assertStatus(Response::HTTP_NO_CONTENT);
+
+    expect(Item::count())->toBe(0);
+});
+
+test('deleting a non-existent item returns a 404', function () {
+    $response = $this->deleteJson("/api/items/1");
+
+    $response->assertStatus(Response::HTTP_NOT_FOUND);
+});
+
+test('deleting a box also deletes its items', function () {
+    $box = Box::factory()->create();
+    Item::factory()->count(3)->create(['box_id' => $box->id]);
+
+    $box->delete();
+
+    expect(Item::count())->toBe(0);
+});
