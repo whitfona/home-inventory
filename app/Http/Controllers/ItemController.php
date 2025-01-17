@@ -16,6 +16,13 @@ class ItemController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function show(Item $item)
+    {
+        return response()->json([
+            'data' => $item
+        ], Response::HTTP_OK);
+    }
+
     public function store(StoreItemRequest $request)
     {
         $item = Item::create($request->validated());

@@ -37,4 +37,10 @@ Route::prefix('api')->group(function () {
     Route::delete('/items/{item}', [ItemController::class, 'destroy']);
 });
 
+Route::get('/items', [ItemController::class, 'index']);
+Route::get('/items/{item}', [ItemController::class, 'show']);
+Route::post('/items', [ItemController::class, 'store']);
+Route::put('/items/{item}', [ItemController::class, 'update']);
+Route::delete('/items/{item}', [ItemController::class, 'destroy']);
+
 require __DIR__.'/auth.php';
