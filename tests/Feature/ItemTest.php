@@ -108,3 +108,86 @@ test('deleting a box also deletes its items', function () {
 
     expect(Item::count())->toBe(0);
 });
+
+test('an item can be updated', function () {
+    $item = Item::factory()->create();
+
+    $updatedItem = [
+        'name' => 'Updated Coffee Mug',
+        'description' => 'Updated description',
+        'photo_path' => 'items/updated-coffee-mug.jpg'
+    ];
+    $response = $this->putJson("/api/items/{$item->id}", $updatedItem);
+
+    $response->assertStatus(Response::HTTP_OK)
+        ->assertJson([
+            'data' => $updatedItem
+        ]);
+
+    expect($item->fresh())
+        ->name->toBe($updatedItem['name'])
+        ->description->toBe($updatedItem['description'])
+        ->photo_path->toBe($updatedItem['photo_path']);
+});
+
+test('name is required when updating an item', function () {
+    $item = Item::factory()->create();
+
+    $response = $this->putJson("/api/items/{$item->id}", [
+        'description' => null,
+        'photo_path' => null
+    ]);
+
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonValidationErrors(['name']);
+});
+
+test('description can be set to null', function () {
+    $item = Item::factory()->create(['description' => 'Original description']);
+
+    $response = $this->putJson("/api/items/{$item->id}", [
+        'name' => 'Updated Coffee Mug',
+        'description' => null,
+        'photo_path' => null
+    ]);
+
+    $response->assertStatus(Response::HTTP_OK);
+
+    expect($item->fresh())
+        ->description->toBeNull()
+        ->photo_path->toBeNull();
+});
+
+test('photo_path can be set to null', function () {
+    $item = Item::factory()->create(['photo_path' => 'items/original.jpg']);
+
+    $response = $this->putJson("/api/items/{$item->id}", [
+        'name' => 'Updated Coffee Mug',
+        'description' => null,
+        'photo_path' => null
+    ]);
+
+    $response->assertStatus(Response::HTTP_OK);
+
+    expect($item->fresh())
+        ->photo_path->toBeNull();
+});
+
+test('box_id cannot be updated', function () {
+    $originalBox = Box::factory()->create();
+    $newBox = Box::factory()->create();
+
+    $item = Item::factory()->create(['box_id' => $originalBox->id]);
+
+    $response = $this->putJson("/api/items/{$item->id}", [
+        'name' => 'Updated Coffee Mug',
+        'description' => null,
+        'photo_path' => null,
+        'box_id' => $newBox->id
+    ]);
+
+    $response->assertStatus(Response::HTTP_OK);
+
+    expect($item->fresh())
+        ->box_id->toBe($originalBox->id);
+});
