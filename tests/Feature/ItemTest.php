@@ -4,6 +4,25 @@ use App\Models\Box;
 use App\Models\Item;
 use Illuminate\Http\Response;
 
+test('items can be retrieved', function () {
+    $items = Item::factory()->count(3)->create();
+
+    $response = $this->getJson('/api/items');
+
+    $response->assertStatus(Response::HTTP_OK)
+        ->assertJson([
+            'data' => $items->map(fn ($item) => [
+                'id' => $item->id,
+                'name' => $item->name,
+                'description' => $item->description,
+                'photo_path' => $item->photo_path,
+                'box_id' => $item->box_id,
+                'created_at' => $item->created_at->toJSON(),
+                'updated_at' => $item->updated_at->toJSON(),
+            ])->toArray()
+        ]);
+});
+
 test('an item can be stored', function () {
     $box = Box::factory()->create();
     $itemData = Item::factory()->raw(['box_id' => $box->id]);

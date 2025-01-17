@@ -9,6 +9,13 @@ use Illuminate\Http\Response;
 
 class ItemController extends Controller
 {
+    public function index()
+    {
+        return response()->json([
+            'data' => Item::all()
+        ], Response::HTTP_OK);
+    }
+
     public function store(StoreItemRequest $request)
     {
         $item = Item::create($request->validated());
