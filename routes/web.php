@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('api')->group(function () {
     Route::get('/boxes', [BoxController::class, 'index']);
+    Route::get('/boxes/{box}', [BoxController::class, 'show']);
     Route::post('/boxes', [BoxController::class, 'store']);
     Route::put('/boxes/{box}', [BoxController::class, 'update']);
     Route::delete('/boxes/{box}', [BoxController::class, 'destroy']);

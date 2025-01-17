@@ -4,27 +4,46 @@ use App\Models\Box;
 use App\Models\Item;
 use Illuminate\Http\Response;
 
-test('all boxes can be retrieved', function() {
-    $box1 = Box::factory()->create();
-    $box2 = Box::factory()->create();
+test('all boxes can be retrieved', function () {
+    $boxes = Box::factory()->count(3)->create();
 
     $response = $this->getJson('/api/boxes');
 
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
+            'data' => $boxes->map(fn ($box) => [
+                'id' => $box->id,
+                'name' => $box->name,
+                'description' => $box->description,
+                'location' => $box->location,
+                'created_at' => $box->created_at->toJSON(),
+                'updated_at' => $box->updated_at->toJSON(),
+            ])->toArray()
+        ]);
+});
+
+test('a box can be retrieved', function () {
+    $box = Box::factory()->create();
+
+    $response = $this->getJson("/api/boxes/{$box->id}");
+
+    $response->assertStatus(Response::HTTP_OK)
+        ->assertJson([
             'data' => [
-                [
-                    'name' => $box1->name,
-                    'description' => $box1->description,
-                    'location' => $box1->location
-                ],
-                [
-                    'name' => $box2->name,
-                    'description' => $box2->description,
-                    'location' => $box2->location
-                ]
+                'id' => $box->id,
+                'name' => $box->name,
+                'description' => $box->description,
+                'location' => $box->location,
+                'created_at' => $box->created_at->toJSON(),
+                'updated_at' => $box->updated_at->toJSON(),
             ]
         ]);
+});
+
+test('getting a non-existent box returns a 404', function () {
+    $response = $this->getJson('/api/boxes/999');
+    
+    $response->assertStatus(Response::HTTP_NOT_FOUND);
 });
 
 test('a box can be stored', function () {

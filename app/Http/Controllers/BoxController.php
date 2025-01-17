@@ -18,6 +18,13 @@ class BoxController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function show(Box $box)
+    {
+        return response()->json([
+            'data' => $box
+        ], Response::HTTP_OK);
+    }
+
     public function store(StoreBoxRequest $request)
     {
         $box = Box::create($request->validated());
