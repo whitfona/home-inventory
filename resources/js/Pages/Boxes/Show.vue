@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 
 interface Item {
     id: number;
@@ -35,6 +35,10 @@ const props = defineProps<{
 const box = ref<BoxResponse | null>(null);
 const loading = ref(true);
 
+const pageTitle = computed(() => {
+    return box.value ? `${box.value.data.name} - Box Details` : 'Loading...';
+});
+
 const getItemPhotoPath = (photoPath: string | null) => {
     if (!photoPath) return '/images/default-item.svg';
     return `/images/${photoPath}`;
@@ -54,9 +58,11 @@ onMounted(async () => {
 
 <template>
     <AppLayout>
+        <Head :title="pageTitle" />
+
         <template #header>
             <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Box Details</h2>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ box?.data.name || 'Box Details' }}</h2>
                 <Link
                     :href="route('dashboard')"
                     class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
