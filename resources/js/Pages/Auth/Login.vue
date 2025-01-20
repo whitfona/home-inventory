@@ -31,6 +31,10 @@ const submit = () => {
     <GuestLayout>
         <Head title="Log in" />
 
+        <div class="mb-4 text-center">
+            <h1 class="text-2xl font-bold text-gray-900">Welcome to Home Inventory</h1>
+        </div>
+
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
         </div>
@@ -70,9 +74,7 @@ const submit = () => {
             <div class="mt-4 block">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
+                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
                 </label>
             </div>
 
@@ -80,7 +82,7 @@ const submit = () => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                     Forgot your password?
                 </Link>
@@ -94,5 +96,17 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
+
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-600">
+                Don't have an account?
+                <Link
+                    :href="route('register')"
+                    class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    Sign up now
+                </Link>
+            </p>
+        </div>
     </GuestLayout>
 </template>
