@@ -1,16 +1,22 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
-const boxes = ref([])
+interface Box {
+  id: number
+  name: string
+  description: string | null
+  location: string
+  photo_path: string | null
+  created_at: string
+  updated_at: string
+}
+
+const boxes = ref<Box[]>([])
 const defaultBoxImage = '/images/packed-box.png'
 
 onMounted(async () => {
-  const response = await fetch('/api/boxes', {
-    headers: {
-      'Accept': 'application/json'
-    }
-  })
+  const response = await fetch('/api/boxes')
   const data = await response.json()
   boxes.value = data.data
 })
