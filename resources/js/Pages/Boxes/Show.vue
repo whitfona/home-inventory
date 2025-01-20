@@ -78,8 +78,12 @@ onMounted(async () => {
                     <div class="p-6 border-b border-gray-200">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <h3 class="text-2xl font-bold text-gray-900 mb-4">{{ box.data.name }}</h3>
-                                <p class="text-gray-600 mb-2">
+                                <h3 class="text-2xl font-bold text-gray-900">{{ box.data.name }}</h3>
+                                <p class="mt-1 text-xs text-gray-500">
+                                    <span class="font-semibold">Last updated:</span>
+                                    {{ new Date(box.data.updated_at).toLocaleDateString() }}
+                                </p>
+                                <p class="mt-4 text-gray-600 mb-2">
                                     <span class="font-semibold">Location:</span> {{ box.data.location }}
                                 </p>
                                 <p class="text-gray-600 mb-4">

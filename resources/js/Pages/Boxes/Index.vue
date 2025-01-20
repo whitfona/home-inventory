@@ -51,6 +51,10 @@ onMounted(async () => {
               </div>
               <div class="p-6">
                 <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600">{{ box.name }}</h2>
+                <p class="mt-1 text-xs text-gray-500">
+                  <span class="font-semibold">Last updated:</span>
+                  {{ new Date(box.updated_at).toLocaleDateString() }}
+                </p>
                 <p v-if="box.description" class="mt-2 text-gray-600">{{ box.description }}</p>
                 <p class="mt-2 text-gray-500">{{ box.location }}</p>
               </div>
