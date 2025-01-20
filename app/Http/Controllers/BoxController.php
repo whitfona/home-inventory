@@ -6,6 +6,7 @@ use App\Models\Box;
 use App\Http\Requests\StoreBoxRequest;
 use App\Http\Requests\UpdateBoxRequest;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 class BoxController extends Controller
 {
@@ -21,7 +22,7 @@ class BoxController extends Controller
     public function show(Box $box)
     {
         return response()->json([
-            'data' => $box
+            'data' => $box->load('items')
         ], Response::HTTP_OK);
     }
 

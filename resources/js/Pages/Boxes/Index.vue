@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 interface Box {
@@ -39,20 +39,22 @@ onMounted(async () => {
           <div
             v-for="box in boxes"
             :key="box.id"
-            class="bg-white overflow-hidden shadow-sm sm:rounded-lg"
+            class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow duration-200"
           >
-            <div class="aspect-video bg-gray-100">
-              <img
-                :src="box.photo_path || defaultBoxImage"
-                :alt="box.name"
-                class="w-full h-full object-contain"
-              >
-            </div>
-            <div class="p-6">
-              <h2 class="text-xl font-semibold">{{ box.name }}</h2>
-              <p v-if="box.description" class="mt-2 text-gray-600">{{ box.description }}</p>
-              <p class="mt-2 text-gray-500">{{ box.location }}</p>
-            </div>
+            <Link :href="route('boxes.show', box.id)">
+              <div class="aspect-video bg-gray-100">
+                <img
+                  :src="box.photo_path || defaultBoxImage"
+                  :alt="box.name"
+                  class="w-full h-full object-contain"
+                >
+              </div>
+              <div class="p-6">
+                <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600">{{ box.name }}</h2>
+                <p v-if="box.description" class="mt-2 text-gray-600">{{ box.description }}</p>
+                <p class="mt-2 text-gray-500">{{ box.location }}</p>
+              </div>
+            </Link>
           </div>
         </div>
       </div>

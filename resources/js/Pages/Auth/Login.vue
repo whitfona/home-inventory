@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
@@ -11,6 +12,8 @@ defineProps<{
     canResetPassword?: boolean;
     status?: string;
 }>();
+
+const emailInput = ref<HTMLInputElement | null>(null);
 
 const form = useForm({
     email: '',
@@ -25,14 +28,21 @@ const submit = () => {
         },
     });
 };
+
+onMounted(() => {
+    // Small delay to let the browser settle
+    setTimeout(() => {
+        emailInput.value?.focus();
+    }, 100);
+});
 </script>
 
 <template>
     <GuestLayout>
         <Head title="Log in" />
 
-        <div class="mb-4 text-center">
-            <h1 class="text-2xl font-bold text-gray-900">Welcome to Home Inventory</h1>
+        <div class="mb-4 text-sm text-gray-600">
+            Welcome to Home Inventory
         </div>
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
@@ -45,11 +55,11 @@ const submit = () => {
 
                 <TextInput
                     id="email"
+                    ref="emailInput"
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
                     required
-                    autofocus
                     autocomplete="username"
                 />
 
@@ -71,42 +81,38 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="mt-4 block">
+            <div class="block mt-4">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
                     <span class="ms-2 text-sm text-gray-600">Remember me</span>
                 </label>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <div class="flex items-center justify-end mt-4">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                     Forgot your password?
                 </Link>
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
+                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
                 </PrimaryButton>
             </div>
-        </form>
 
-        <div class="mt-6 text-center">
-            <p class="text-sm text-gray-600">
-                Don't have an account?
-                <Link
-                    :href="route('register')"
-                    class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Sign up now
-                </Link>
-            </p>
-        </div>
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account?
+                    <Link
+                        :href="route('register')"
+                        class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                        Sign up now
+                    </Link>
+                </p>
+            </div>
+        </form>
     </GuestLayout>
 </template>

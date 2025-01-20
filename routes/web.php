@@ -10,9 +10,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/boxes', function () {
-        return Inertia::render('Boxes/Index');
-    })->name('dashboard');
+    Route::get('/boxes', fn () => Inertia::render('Boxes/Index'))->name('dashboard');
+    Route::get('/boxes/{id}', fn (string $id) => Inertia::render('Boxes/Show', ['id' => $id]))->name('boxes.show');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
