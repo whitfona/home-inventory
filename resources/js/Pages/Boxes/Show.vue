@@ -35,6 +35,11 @@ const props = defineProps<{
 const box = ref<BoxResponse | null>(null);
 const loading = ref(true);
 
+const getItemPhotoPath = (photoPath: string | null) => {
+    if (!photoPath) return '/images/default-item.svg';
+    return `/images/${photoPath}`;
+};
+
 onMounted(async () => {
     try {
         const response = await fetch(`/api/boxes/${props.id}`);
@@ -83,7 +88,7 @@ onMounted(async () => {
                                 </p>
                             </div>
                             <div v-if="box.data.photo_path" class="flex justify-center items-center">
-                                <img :src="box.data.photo_path" :alt="box.data.name" class="max-h-48 object-contain rounded-lg shadow-md">
+                                <img :src="getItemPhotoPath(box.data.photo_path)" :alt="box.data.name" class="max-h-48 object-contain rounded-lg shadow-md">
                             </div>
                         </div>
                     </div>
@@ -99,8 +104,8 @@ onMounted(async () => {
                         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div v-for="item in box.data.items" :key="item.id" class="bg-gray-50 rounded-lg p-4 shadow-sm">
                                 <div class="flex items-start space-x-4">
-                                    <div v-if="item.photo_path" class="flex-shrink-0">
-                                        <img :src="item.photo_path" :alt="item.name" class="h-20 w-20 object-cover rounded">
+                                    <div class="flex-shrink-0">
+                                        <img :src="getItemPhotoPath(item.photo_path)" :alt="item.name" class="h-20 w-20 object-cover rounded">
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-lg font-medium text-gray-900 truncate">{{ item.name }}</p>
