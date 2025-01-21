@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { Head, Link } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue'
+import NewBoxModal from '@/Components/NewBoxModal.vue'
+import { api } from '@/utils/api'
 
 interface Box {
   id: number
@@ -15,9 +17,10 @@ interface Box {
 
 const boxes = ref<Box[]>([])
 const defaultBoxImage = '/images/packed-box.png'
+const showNewBoxModal = ref(false)
 
 onMounted(async () => {
-  const response = await fetch('/api/boxes')
+  const response = await api.get('/api/boxes')
   const data = await response.json()
   boxes.value = data.data
 })
@@ -28,9 +31,17 @@ onMounted(async () => {
 
   <AppLayout>
     <template #header>
-      <h1 class="font-semibold text-xl text-gray-800 leading-tight">
-        Boxes
-      </h1>
+      <div class="flex justify-between items-center">
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight">
+          Boxes
+        </h1>
+        <button
+          @click="showNewBoxModal = true"
+          class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+        >
+          New Box
+        </button>
+      </div>
     </template>
 
     <div class="py-12">
@@ -63,5 +74,10 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <NewBoxModal
+      :show="showNewBoxModal"
+      @close="showNewBoxModal = false"
+    />
   </AppLayout>
 </template>
