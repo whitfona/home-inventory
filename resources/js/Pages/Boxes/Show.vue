@@ -4,6 +4,7 @@ import AppLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import NewItemModal from '@/Components/NewItemModal.vue';
 import EditBoxModal from '@/Components/EditBoxModal.vue';
+import EditItemModal from '@/Components/EditItemModal.vue';
 import PencilIcon from '@/Components/Icons/PencilIcon.vue';
 import { api } from '@/utils/api';
 
@@ -38,8 +39,10 @@ const props = defineProps<{
 
 const box = ref<BoxResponse | null>(null);
 const loading = ref(true);
-const showNewItemModal = ref(false);
 const showEditBoxModal = ref(false);
+const showNewItemModal = ref(false);
+const showEditItemModal = ref(false);
+const selectedItem = ref<Item | null>(null);
 
 const pageTitle = computed(() => {
     return box.value ? `${box.value.data.name} - Box Details` : 'Loading...';
@@ -48,6 +51,17 @@ const pageTitle = computed(() => {
 const getItemPhotoPath = (photoPath: string | null) => {
     if (!photoPath) return '/images/default-item.svg';
     return `/images/${photoPath}`;
+};
+
+const editItem = (item: Item) => {
+  console.log('item', item)
+    selectedItem.value = item;
+    showEditItemModal.value = true;
+};
+
+const closeEditModal = () => {
+    showEditItemModal.value = false;
+    selectedItem.value = null;
 };
 
 onMounted(async () => {
@@ -134,7 +148,13 @@ onMounted(async () => {
                         </div>
 
                         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div v-for="item in box.data.items" :key="item.id" class="bg-gray-50 rounded-lg p-4 shadow-sm">
+                            <div v-for="item in box.data.items" :key="item.id" class="bg-gray-50 rounded-lg p-4 shadow-sm relative group">
+                                <button
+                                    class="absolute top-2 right-2 p-2 rounded-full bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-gray-50"
+                                    @click="editItem(item)"
+                                >
+                                    <PencilIcon />
+                                </button>
                                 <div class="flex items-start space-x-4">
                                     <div class="flex-shrink-0">
                                         <img :src="getItemPhotoPath(item.photo_path)" :alt="item.name" class="h-20 w-20 object-cover rounded">
@@ -167,6 +187,13 @@ onMounted(async () => {
             :show="showEditBoxModal"
             :box="box.data"
             @close="showEditBoxModal = false"
+        />
+
+        <EditItemModal
+            v-if="selectedItem"
+            :show="showEditItemModal"
+            :item="selectedItem"
+            @close="closeEditModal"
         />
     </AppLayout>
 </template>
