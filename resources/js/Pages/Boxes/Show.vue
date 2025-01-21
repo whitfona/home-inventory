@@ -3,6 +3,8 @@ import { ref, onMounted, computed } from 'vue';
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import NewItemModal from '@/Components/NewItemModal.vue';
+import EditBoxModal from '@/Components/EditBoxModal.vue';
+import PencilIcon from '@/Components/Icons/PencilIcon.vue';
 import { api } from '@/utils/api';
 
 interface Item {
@@ -37,6 +39,7 @@ const props = defineProps<{
 const box = ref<BoxResponse | null>(null);
 const loading = ref(true);
 const showNewItemModal = ref(false);
+const showEditBoxModal = ref(false);
 
 const pageTitle = computed(() => {
     return box.value ? `${box.value.data.name} - Box Details` : 'Loading...';
@@ -86,7 +89,13 @@ onMounted(async () => {
 
                 <div v-else-if="box" class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <!-- Box Details -->
-                    <div class="p-6 border-b border-gray-200">
+                    <div class="p-6 border-b border-gray-200 relative">
+                        <button
+                            class="absolute top-4 right-4 p-2 rounded-full bg-white shadow-sm hover:bg-gray-50"
+                            @click="showEditBoxModal = true"
+                        >
+                            <PencilIcon />
+                        </button>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <h3 class="text-2xl font-bold text-gray-900">{{ box.data.name }}</h3>
@@ -151,6 +160,13 @@ onMounted(async () => {
             :show="showNewItemModal"
             :box-id="Number(box.data.id)"
             @close="showNewItemModal = false"
+        />
+
+        <EditBoxModal
+            v-if="box"
+            :show="showEditBoxModal"
+            :box="box.data"
+            @close="showEditBoxModal = false"
         />
     </AppLayout>
 </template>
