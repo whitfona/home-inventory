@@ -54,7 +54,6 @@ const getItemPhotoPath = (photoPath: string | null) => {
 };
 
 const editItem = (item: Item) => {
-  console.log('item', item)
     selectedItem.value = item;
     showEditItemModal.value = true;
 };
@@ -151,7 +150,7 @@ onMounted(async () => {
                             <div v-for="item in box.data.items" :key="item.id" class="bg-gray-50 rounded-lg p-4 shadow-sm relative group">
                                 <button
                                     class="absolute top-2 right-2 p-2 rounded-full bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-gray-50"
-                                    @click="editItem(item)"
+                                    @click.prevent="editItem(item)"
                                 >
                                     <PencilIcon />
                                 </button>

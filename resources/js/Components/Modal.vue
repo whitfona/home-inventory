@@ -15,24 +15,28 @@ const props = withDefaults(
 );
 
 const emit = defineEmits(['close']);
-const dialog = ref();
+const dialog = ref<HTMLDialogElement>();
 const showSlot = ref(props.show);
+
+onMounted(() => {
+    if (props.show) {
+        document.body.style.overflow = 'hidden';
+        showSlot.value = true;
+        dialog.value?.showModal();
+    }
+});
 
 watch(
     () => props.show,
-    () => {
-        if (props.show) {
+    (value) => {
+        if (value) {
             document.body.style.overflow = 'hidden';
             showSlot.value = true;
-
             dialog.value?.showModal();
         } else {
             document.body.style.overflow = '';
-
-            setTimeout(() => {
-                dialog.value?.close();
-                showSlot.value = false;
-            }, 200);
+            dialog.value?.close();
+            showSlot.value = false;
         }
     },
 );
