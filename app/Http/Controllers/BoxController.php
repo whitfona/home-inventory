@@ -15,7 +15,7 @@ class BoxController extends Controller
         $boxes = Box::all();
 
         return response()->json([
-            'data' => $boxes
+            'data' => $boxes->load('items')
         ], Response::HTTP_OK);
     }
 
