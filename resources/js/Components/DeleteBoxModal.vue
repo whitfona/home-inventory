@@ -5,10 +5,22 @@ import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { api } from '@/utils/api';
 
+interface Item {
+    id: number;
+    name: string;
+    description: string | null;
+    photo_path: string | null;
+    box_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 interface Box {
     id: number;
     name: string;
-    items_count?: number;
+    description: string | null;
+    location: string;
+    items: Array<Item>;
 }
 
 const props = defineProps<{
@@ -52,7 +64,7 @@ const deleteBox = async () => {
             <p class="mt-3 text-sm text-gray-600">
                 Are you sure you want to delete "{{ box.name }}"?
                 <span v-if="box.items.length" class="font-medium text-red-600">
-                    This box contains {{ box.items.length }} item{{ box.items_count === 1 ? '' : 's' }}.
+                    This box contains {{ box.items.length }} item{{ box.items.length === 1 ? '' : 's' }}.
                 </span>
                 This action cannot be undone.
             </p>

@@ -30,7 +30,6 @@ onMounted(async () => {
 })
 
 const confirmDelete = (box: Box) => {
-    console.log('box', box)
   boxToDelete.value = box
   showDeleteBoxModal.value = true
 }
