@@ -14,11 +14,18 @@ const showNewBoxModal = ref(false)
 const showDeleteBoxModal = ref(false)
 const boxToDelete = ref<Box | null>(null)
 
-onMounted(async () => {
+const loadBoxes = async () => {
   const response = await api.get('/api/boxes')
   const data = await response.json()
   boxes.value = data.data
-})
+}
+
+onMounted(loadBoxes)
+
+const handleBoxAdded = () => {
+  showNewBoxModal.value = false
+  loadBoxes()
+}
 
 const confirmDelete = (box: Box) => {
   boxToDelete.value = box
@@ -88,7 +95,7 @@ const confirmDelete = (box: Box) => {
 
     <NewBoxModal
       :show="showNewBoxModal"
-      @box-added="showNewBoxModal = false"
+      @box-added="handleBoxAdded"
       @close="showNewBoxModal = false"
     />
 
