@@ -6,7 +6,9 @@ import NewItemModal from '@/Components/NewItemModal.vue';
 import EditBoxModal from '@/Components/EditBoxModal.vue';
 import EditItemModal from '@/Components/EditItemModal.vue';
 import PencilIcon from '@/Components/Icons/PencilIcon.vue';
+import TrashIcon from '@/Components/Icons/TrashIcon.vue';
 import { api } from '@/utils/api';
+import DeleteItemModal from '@/Components/DeleteItemModal.vue';
 
 interface Item {
     id: number;
@@ -42,7 +44,9 @@ const loading = ref(true);
 const showEditBoxModal = ref(false);
 const showNewItemModal = ref(false);
 const showEditItemModal = ref(false);
+const showDeleteItemModal = ref(false);
 const selectedItem = ref<Item | null>(null);
+const itemToDelete = ref<Item | null>(null);
 
 const pageTitle = computed(() => {
     return box.value ? `${box.value.data.name} - Box Details` : 'Loading...';
@@ -61,6 +65,11 @@ const editItem = (item: Item) => {
 const closeEditModal = () => {
     showEditItemModal.value = false;
     selectedItem.value = null;
+};
+
+const confirmDelete = (item: Item) => {
+    itemToDelete.value = item;
+    showDeleteItemModal.value = true;
 };
 
 onMounted(async () => {
@@ -148,12 +157,20 @@ onMounted(async () => {
 
                         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div v-for="item in box.data.items" :key="item.id" class="bg-gray-50 rounded-lg p-4 shadow-sm relative group">
-                                <button
-                                    class="absolute top-2 right-2 p-2 rounded-full bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-gray-50"
-                                    @click.prevent="editItem(item)"
-                                >
-                                    <PencilIcon />
-                                </button>
+                                <div class="absolute top-2 right-2 flex space-x-1">
+                                    <button
+                                        class="p-2 rounded-full bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-gray-50"
+                                        @click.prevent="editItem(item)"
+                                    >
+                                        <PencilIcon />
+                                    </button>
+                                    <button
+                                        class="p-2 rounded-full bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-50"
+                                        @click.prevent="confirmDelete(item)"
+                                    >
+                                        <TrashIcon class="text-red-600" />
+                                    </button>
+                                </div>
                                 <div class="flex items-start space-x-4">
                                     <div class="flex-shrink-0">
                                         <img :src="getItemPhotoPath(item.photo_path)" :alt="item.name" class="h-20 w-20 object-cover rounded">
@@ -193,6 +210,13 @@ onMounted(async () => {
             :show="showEditItemModal"
             :item="selectedItem"
             @close="closeEditModal"
+        />
+
+        <DeleteItemModal
+            v-if="itemToDelete"
+            :show="showDeleteItemModal"
+            :item="itemToDelete"
+            @close="showDeleteItemModal = false; itemToDelete = null;"
         />
     </AppLayout>
 </template>
