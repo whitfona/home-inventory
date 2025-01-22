@@ -4,24 +4,7 @@ import Modal from '@/Components/Modal.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { api } from '@/utils/api';
-
-interface Item {
-    id: number;
-    name: string;
-    description: string | null;
-    photo_path: string | null;
-    box_id: number;
-    created_at: string;
-    updated_at: string;
-}
-
-interface Box {
-    id: number;
-    name: string;
-    description: string | null;
-    location: string;
-    items: Item[];
-}
+import type { Box } from '@/types';
 
 const props = defineProps<{
     show: boolean;

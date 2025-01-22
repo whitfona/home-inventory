@@ -6,27 +6,7 @@ import NewBoxModal from '@/Components/NewBoxModal.vue'
 import { api } from '@/utils/api'
 import TrashIcon from '@/Components/Icons/TrashIcon.vue'
 import DeleteBoxModal from '@/Components/DeleteBoxModal.vue'
-
-interface Item {
-  id: number
-  name: string
-  description: string | null
-  photo_path: string | null
-  box_id: number
-  created_at: string
-  updated_at: string
-}
-
-interface Box {
-  id: number
-  name: string
-  description: string | null
-  location: string
-  photo_path: string | null
-  created_at: string
-  updated_at: string
-  items: Item[]
-}
+import type { Box } from '@/types'
 
 const boxes = ref<Box[]>([])
 const defaultBoxImage = '/images/packed-box.png'

@@ -7,14 +7,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { api } from '@/utils/api';
-
-interface Item {
-    id: number;
-    name: string;
-    description: string | null;
-    photo_path: string | null;
-    box_id: number;
-}
+import type { Item } from '@/types';
 
 const props = defineProps<{
     show: boolean;

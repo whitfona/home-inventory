@@ -4,11 +4,7 @@ import Modal from '@/Components/Modal.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { api } from '@/utils/api';
-
-interface Item {
-    id: number;
-    name: string;
-}
+import type { Item } from '@/types';
 
 const props = defineProps<{
     show: boolean;

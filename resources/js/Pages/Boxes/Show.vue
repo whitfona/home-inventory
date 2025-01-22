@@ -9,27 +9,7 @@ import PencilIcon from '@/Components/Icons/PencilIcon.vue';
 import TrashIcon from '@/Components/Icons/TrashIcon.vue';
 import { api } from '@/utils/api';
 import DeleteItemModal from '@/Components/DeleteItemModal.vue';
-
-interface Item {
-    id: number;
-    name: string;
-    description: string | null;
-    photo_path: string | null;
-    box_id: number;
-    created_at: string;
-    updated_at: string;
-}
-
-interface Box {
-    id: number;
-    name: string;
-    description: string | null;
-    location: string;
-    photo_path: string | null;
-    created_at: string;
-    updated_at: string;
-    items: Item[];
-}
+import type { Box, Item } from '@/types';
 
 interface BoxResponse {
     data: Box;
