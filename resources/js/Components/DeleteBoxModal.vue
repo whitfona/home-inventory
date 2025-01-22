@@ -20,7 +20,7 @@ interface Box {
     name: string;
     description: string | null;
     location: string;
-    items: Array<Item>;
+    items: Item[];
 }
 
 const props = defineProps<{

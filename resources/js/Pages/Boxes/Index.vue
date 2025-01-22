@@ -7,6 +7,16 @@ import { api } from '@/utils/api'
 import TrashIcon from '@/Components/Icons/TrashIcon.vue'
 import DeleteBoxModal from '@/Components/DeleteBoxModal.vue'
 
+interface Item {
+  id: number
+  name: string
+  description: string | null
+  photo_path: string | null
+  box_id: number
+  created_at: string
+  updated_at: string
+}
+
 interface Box {
   id: number
   name: string
@@ -15,6 +25,7 @@ interface Box {
   photo_path: string | null
   created_at: string
   updated_at: string
+  items: Item[]
 }
 
 const boxes = ref<Box[]>([])
@@ -85,6 +96,9 @@ const confirmDelete = (box: Box) => {
                 </p>
                 <p v-if="box.description" class="mt-2 text-gray-600">{{ box.description }}</p>
                 <p class="mt-2 text-gray-500">{{ box.location }}</p>
+                <p class="mt-2 text-sm text-gray-500">
+                  {{ box.items.length }} item{{ box.items.length === 1 ? '' : 's' }}
+                </p>
               </div>
             </Link>
           </div>
