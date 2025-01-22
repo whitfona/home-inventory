@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useToast } from 'vue-toast-notification';
 import Modal from '@/Components/Modal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -7,6 +8,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { api } from '@/utils/api';
+import type { Box } from '@/types';
 
 const props = defineProps<{
     show: boolean;
@@ -14,8 +16,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: [];
+    'box-added': [box: Box];
 }>();
 
+const toast = useToast();
 const form = ref({
     name: '',
     location: '',
@@ -43,16 +47,25 @@ const submitForm = async () => {
             const data = await response.json();
             if (data.errors) {
                 errors.value = data.errors;
+                return;
             }
-            return;
+            throw new Error('Failed to create box');
         }
 
-        // Reset form and close modal on success
+        const { data } = await response.json();
+        emit('box-added', data);
         form.value = { name: '', location: '', description: '', photo_path: null };
         emit('close');
-        window.location.reload(); // Refresh to show new box
+        toast.success('Box added successfully', {
+            position: 'top',
+            duration: 3000
+        });
     } catch (error) {
         console.error('Error creating box:', error);
+        toast.error('Failed to create box', {
+            position: 'top',
+            duration: 3000
+        });
     } finally {
         loading.value = false;
     }

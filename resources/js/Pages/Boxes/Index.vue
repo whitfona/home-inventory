@@ -88,6 +88,7 @@ const confirmDelete = (box: Box) => {
 
     <NewBoxModal
       :show="showNewBoxModal"
+      @box-added="showNewBoxModal = false"
       @close="showNewBoxModal = false"
     />
 
