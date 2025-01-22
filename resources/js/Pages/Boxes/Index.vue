@@ -4,6 +4,8 @@ import { Head, Link } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue'
 import NewBoxModal from '@/Components/NewBoxModal.vue'
 import { api } from '@/utils/api'
+import TrashIcon from '@/Components/Icons/TrashIcon.vue'
+import DeleteBoxModal from '@/Components/DeleteBoxModal.vue'
 
 interface Box {
   id: number
@@ -18,12 +20,20 @@ interface Box {
 const boxes = ref<Box[]>([])
 const defaultBoxImage = '/images/packed-box.png'
 const showNewBoxModal = ref(false)
+const showDeleteBoxModal = ref(false)
+const boxToDelete = ref<Box | null>(null)
 
 onMounted(async () => {
   const response = await api.get('/api/boxes')
   const data = await response.json()
   boxes.value = data.data
 })
+
+const confirmDelete = (box: Box) => {
+    console.log('box', box)
+  boxToDelete.value = box
+  showDeleteBoxModal.value = true
+}
 </script>
 
 <template>
@@ -50,8 +60,16 @@ onMounted(async () => {
           <div
             v-for="box in boxes"
             :key="box.id"
-            class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow duration-200"
+            class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow duration-200 relative group"
           >
+            <div class="absolute top-2 right-2 flex space-x-1 z-10">
+              <button
+                class="p-2 rounded-full bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-50"
+                @click.prevent="confirmDelete(box)"
+              >
+                <TrashIcon class="text-red-600" />
+              </button>
+            </div>
             <Link :href="route('boxes.show', box.id)">
               <div class="aspect-video bg-gray-100">
                 <img
@@ -78,6 +96,13 @@ onMounted(async () => {
     <NewBoxModal
       :show="showNewBoxModal"
       @close="showNewBoxModal = false"
+    />
+
+    <DeleteBoxModal
+      v-if="boxToDelete"
+      :show="showDeleteBoxModal"
+      :box="boxToDelete"
+      @close="showDeleteBoxModal = false; boxToDelete = null;"
     />
   </AppLayout>
 </template>
