@@ -194,9 +194,9 @@ onMounted(loadBox);
         />
 
         <DeleteItemModal
-            v-if="selectedItem"
+            v-if="itemToDelete"
             :show="showDeleteItemModal"
-            :item="selectedItem"
+            :item="itemToDelete"
             @close="showDeleteItemModal = false"
             @item-deleted="handleItemDeleted"
         />
