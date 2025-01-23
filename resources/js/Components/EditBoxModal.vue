@@ -24,8 +24,8 @@ const toast = useToast();
 const form = ref({
     name: props.box.name,
     location: props.box.location,
-    description: props.box.description,
-    photo_path: props.box.photo_path
+    description: props.box.description || '',
+    photo_path: props.box.photo_path || ''
 });
 
 const errors = ref({
@@ -41,9 +41,9 @@ const loading = ref(false);
 watch(() => props.box, (newBox) => {
     form.value = {
         name: newBox.name,
-        description: newBox.description,
+        description: newBox.description || '',
         location: newBox.location,
-        photo_path: newBox.photo_path
+        photo_path: newBox.photo_path || ''
     };
 }, { immediate: true });
 
