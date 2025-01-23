@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+`import { useToast } from 'vue-toast-notification';
 import Modal from '@/Components/Modal.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -13,12 +14,14 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: [];
+    'box-deleted': [box: Box];
 }>();
 
-const isDeleting = ref(false);
+const toast = useToast();
+const loading = ref(false);
 
 const deleteBox = async () => {
-    isDeleting.value = true;
+    loading.value = true;
 
     try {
         const response = await api.delete(`/api/boxes/${props.box.id}`);
@@ -27,12 +30,20 @@ const deleteBox = async () => {
             throw new Error('Failed to delete box');
         }
 
+        emit('box-deleted', props.box);
         emit('close');
-        window.location.reload();
+        toast.success('Box deleted successfully', {
+            position: 'top',
+            duration: 3000,
+        });
     } catch (error) {
         console.error('Error deleting box:', error);
+        toast.error('Failed to delete box', {
+            position: 'top',
+            duration: 3000,
+        });
     } finally {
-        isDeleting.value = false;
+        loading.value = false;
     }
 };
 </script>
@@ -59,8 +70,8 @@ const deleteBox = async () => {
 
                 <DangerButton
                     @click="deleteBox"
-                    :class="{ 'opacity-25': isDeleting }"
-                    :disabled="isDeleting"
+                    :class="{ 'opacity-25': loading }"
+                    :disabled="loading"
                 >
                     Delete Box
                 </DangerButton>

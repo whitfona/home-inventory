@@ -31,6 +31,12 @@ const confirmDelete = (box: Box) => {
   boxToDelete.value = box
   showDeleteBoxModal.value = true
 }
+
+const handleBoxDeleted = () => {
+  showDeleteBoxModal.value = false
+  boxToDelete.value = null
+  loadBoxes()
+}
 </script>
 
 <template>
@@ -104,6 +110,7 @@ const confirmDelete = (box: Box) => {
       :show="showDeleteBoxModal"
       :box="boxToDelete"
       @close="showDeleteBoxModal = false; boxToDelete = null;"
+      @box-deleted="handleBoxDeleted"
     />
   </AppLayout>
 </template>
