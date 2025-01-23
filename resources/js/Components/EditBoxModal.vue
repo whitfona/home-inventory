@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { useToast } from 'vue-toast-notification';
 import Modal from '@/Components/Modal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -7,14 +8,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { api } from '@/utils/api';
-
-interface Box {
-    id: number;
-    name: string;
-    description: string | null;
-    location: string;
-    photo_path: string | null;
-}
+import type { Box } from '@/types';
 
 const props = defineProps<{
     show: boolean;
@@ -23,19 +17,21 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: [];
+    'box-updated': [box: Box];
 }>();
 
+const toast = useToast();
 const form = ref({
-    name: '',
-    description: null as string | null,
-    location: '',
-    photo_path: null as string | null
+    name: props.box.name,
+    location: props.box.location,
+    description: props.box.description,
+    photo_path: props.box.photo_path
 });
 
 const errors = ref({
     name: '',
-    description: '',
     location: '',
+    description: '',
     photo_path: ''
 });
 
@@ -53,7 +49,7 @@ watch(() => props.box, (newBox) => {
 
 const submitForm = async () => {
     loading.value = true;
-    errors.value = { name: '', description: '', location: '', photo_path: '' };
+    errors.value = { name: '', location: '', description: '', photo_path: '' };
 
     try {
         const response = await api.put(`/api/boxes/${props.box.id}`, form.value);
@@ -62,14 +58,24 @@ const submitForm = async () => {
             const data = await response.json();
             if (data.errors) {
                 errors.value = data.errors;
+                return;
             }
-            return;
+            throw new Error('Failed to update box');
         }
 
+        const { data } = await response.json();
+        emit('box-updated', data);
         emit('close');
-        window.location.reload(); // Refresh to show updated box
+        toast.success('Box updated successfully', {
+            position: 'top',
+            duration: 3000,
+        });
     } catch (error) {
         console.error('Error updating box:', error);
+        toast.error('Failed to update box', {
+            position: 'top',
+            duration: 3000,
+        });
     } finally {
         loading.value = false;
     }

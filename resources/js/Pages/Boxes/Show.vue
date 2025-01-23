@@ -74,6 +74,11 @@ const handleItemAdded = () => {
     loadBox();
 };
 
+const handleBoxUpdated = () => {
+    showEditBoxModal.value = false;
+    loadBox();
+};
+
 onMounted(loadBox);
 </script>
 
@@ -191,6 +196,7 @@ onMounted(loadBox);
             :show="showEditBoxModal"
             :box="box.data"
             @close="showEditBoxModal = false"
+            @box-updated="handleBoxUpdated"
         />
 
         <DeleteItemModal
