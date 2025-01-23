@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-`import { useToast } from 'vue-toast-notification';
+import { useToast } from 'vue-toast-notification';
 import Modal from '@/Components/Modal.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';

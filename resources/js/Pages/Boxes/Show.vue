@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import NewItemModal from '@/Components/NewItemModal.vue';
 import EditBoxModal from '@/Components/EditBoxModal.vue';
 import EditItemModal from '@/Components/EditItemModal.vue';
