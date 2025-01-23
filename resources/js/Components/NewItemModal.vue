@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useToast } from 'vue-toast-notification';
 import Modal from '@/Components/Modal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -7,6 +8,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { api } from '@/utils/api';
+import type { Item } from '@/types';
 
 const props = defineProps<{
     show: boolean;
@@ -15,8 +17,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: [];
+    'item-added': [item: Item];
 }>();
 
+const toast = useToast();
 const form = ref({
     name: '',
     description: '',
@@ -43,16 +47,30 @@ const submitForm = async () => {
             const data = await response.json();
             if (data.errors) {
                 errors.value = data.errors;
+                return;
             }
-            return;
+            throw new Error('Failed to create item');
         }
 
-        // Reset form and close modal on success
-        form.value = { name: '', description: '', photo_path: null, box_id: props.boxId };
+        const { data } = await response.json();
+        emit('item-added', data);
+        form.value = {
+            name: '',
+            description: '',
+            photo_path: null,
+            box_id: props.boxId
+        };
         emit('close');
-        window.location.reload(); // Refresh to show new item
+        toast.success('Item added successfully', {
+            position: 'top',
+            duration: 3000,
+        });
     } catch (error) {
         console.error('Error creating item:', error);
+        toast.error('Failed to create item', {
+            position: 'top',
+            duration: 3000,
+        });
     } finally {
         loading.value = false;
     }
@@ -108,4 +126,4 @@ const submitForm = async () => {
             </form>
         </div>
     </Modal>
-</template> 
+</template>
