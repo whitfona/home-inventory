@@ -52,7 +52,7 @@ const confirmDelete = (item: Item) => {
     showDeleteItemModal.value = true;
 };
 
-onMounted(async () => {
+const loadBox = async () => {
     try {
         const response = await api.get(`/api/boxes/${props.id}`);
         box.value = await response.json();
@@ -61,24 +61,31 @@ onMounted(async () => {
     } finally {
         loading.value = false;
     }
-});
+};
+
+const handleItemDeleted = () => {
+    showDeleteItemModal.value = false;
+    selectedItem.value = null;
+    loadBox();
+};
+
+const handleItemAdded = () => {
+    showNewItemModal.value = false;
+    loadBox();
+};
+
+onMounted(loadBox);
 </script>
 
 <template>
-    <AppLayout>
-        <Head :title="pageTitle" />
+    <Head :title="box?.data.name || 'Loading...'" />
 
+    <AppLayout>
         <template #header>
             <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ box?.data.name || 'Box Details' }}</h2>
-                <div class="flex space-x-4">
-                    <Link
-                        :href="route('dashboard')"
-                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
-                    >
-                        Back to Boxes
-                    </Link>
-                </div>
+                <h1 class="font-semibold text-xl text-gray-800 leading-tight">
+                    {{ box?.data.name }}
+                </h1>
             </div>
         </template>
 
@@ -176,6 +183,7 @@ onMounted(async () => {
             :show="showNewItemModal"
             :box-id="Number(box.data.id)"
             @close="showNewItemModal = false"
+            @item-added="handleItemAdded"
         />
 
         <EditBoxModal
@@ -185,18 +193,19 @@ onMounted(async () => {
             @close="showEditBoxModal = false"
         />
 
+        <DeleteItemModal
+            v-if="selectedItem"
+            :show="showDeleteItemModal"
+            :item="selectedItem"
+            @close="showDeleteItemModal = false"
+            @item-deleted="handleItemDeleted"
+        />
+
         <EditItemModal
             v-if="selectedItem"
             :show="showEditItemModal"
             :item="selectedItem"
-            @close="closeEditModal"
-        />
-
-        <DeleteItemModal
-            v-if="itemToDelete"
-            :show="showDeleteItemModal"
-            :item="itemToDelete"
-            @close="showDeleteItemModal = false; itemToDelete = null;"
+            @close="showEditItemModal = false; selectedItem = null;"
         />
     </AppLayout>
 </template>
