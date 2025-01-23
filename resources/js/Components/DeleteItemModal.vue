@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useToast } from 'vue-toast-notification';
 import Modal from '@/Components/Modal.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -13,12 +14,14 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: [];
+    'item-deleted': [item: Item];
 }>();
 
-const isDeleting = ref(false);
+const toast = useToast();
+const loading = ref(false);
 
 const deleteItem = async () => {
-    isDeleting.value = true;
+    loading.value = true;
 
     try {
         const response = await api.delete(`/api/items/${props.item.id}`);
@@ -27,12 +30,20 @@ const deleteItem = async () => {
             throw new Error('Failed to delete item');
         }
 
+        emit('item-deleted', props.item);
         emit('close');
-        window.location.reload();
+        toast.success('Item deleted successfully', {
+            position: 'top',
+            duration: 3000,
+        });
     } catch (error) {
         console.error('Error deleting item:', error);
+        toast.error('Failed to delete item', {
+            position: 'top',
+            duration: 3000,
+        });
     } finally {
-        isDeleting.value = false;
+        loading.value = false;
     }
 };
 </script>
@@ -55,8 +66,8 @@ const deleteItem = async () => {
 
                 <DangerButton
                     @click="deleteItem"
-                    :class="{ 'opacity-25': isDeleting }"
-                    :disabled="isDeleting"
+                    :class="{ 'opacity-25': loading }"
+                    :disabled="loading"
                 >
                     Delete Item
                 </DangerButton>
