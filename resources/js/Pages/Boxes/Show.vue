@@ -55,7 +55,18 @@ const confirmDelete = (item: Item) => {
 const loadBox = async () => {
     try {
         const response = await api.get(`/api/boxes/${props.id}`);
-        box.value = await response.json();
+        const boxResponse = await response.json();
+        
+        // Load items for the box
+        const itemsResponse = await api.get(`/api/boxes/${props.id}/items`);
+        const itemsData = await itemsResponse.json();
+        
+        box.value = {
+            data: {
+                ...boxResponse.data,
+                items: itemsData.data
+            }
+        };
     } catch (error) {
         console.error('Error fetching box details:', error);
     } finally {

@@ -24,8 +24,7 @@ const toast = useToast();
 const form = ref({
     name: '',
     description: '',
-    photo_path: null as string | null,
-    box_id: props.boxId
+    photo_path: null as string | null
 });
 
 const errors = ref({
@@ -41,7 +40,7 @@ const submitForm = async () => {
     errors.value = { name: '', description: '', photo_path: '' };
 
     try {
-        const response = await api.post('/api/items', form.value);
+        const response = await api.post(`/api/boxes/${props.boxId}/items`, form.value);
 
         if (!response.ok) {
             const data = await response.json();
@@ -57,8 +56,7 @@ const submitForm = async () => {
         form.value = {
             name: '',
             description: '',
-            photo_path: null,
-            box_id: props.boxId
+            photo_path: null
         };
         emit('close');
         toast.success('Item added successfully', {

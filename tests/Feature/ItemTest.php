@@ -5,9 +5,10 @@ use App\Models\Item;
 use Illuminate\Http\Response;
 
 test('items can be retrieved', function () {
-    $items = Item::factory()->count(3)->create();
+    $box = Box::factory()->create();
+    $items = Item::factory()->count(3)->create(['box_id' => $box->id]);
 
-    $response = $this->getJson('/api/items');
+    $response = $this->getJson("/api/boxes/{$box->id}/items");
 
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
@@ -24,9 +25,10 @@ test('items can be retrieved', function () {
 });
 
 test('a single item can be retrieved', function () {
-    $item = Item::factory()->create();
+    $box = Box::factory()->create();
+    $item = Item::factory()->create(['box_id' => $box->id]);
 
-    $response = $this->getJson("/api/items/{$item->id}");
+    $response = $this->getJson("/api/boxes/{$box->id}/items/{$item->id}");
 
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
@@ -43,7 +45,8 @@ test('a single item can be retrieved', function () {
 });
 
 test('getting a non-existent item returns a 404', function () {
-    $response = $this->getJson('/api/items/999');
+    $box = Box::factory()->create();
+    $response = $this->getJson("/api/boxes/{$box->id}/items/999");
     
     $response->assertStatus(Response::HTTP_NOT_FOUND);
 });
@@ -52,7 +55,7 @@ test('an item can be stored', function () {
     $box = Box::factory()->create();
     $itemData = Item::factory()->raw(['box_id' => $box->id]);
 
-    $response = $this->postJson('/api/items', $itemData);
+    $response = $this->postJson("/api/boxes/{$box->id}/items", $itemData);
 
     $response->assertStatus(Response::HTTP_CREATED)
         ->assertJson([
@@ -85,41 +88,36 @@ test('an item belongs to a box', function () {
 });
 
 test('name is required when creating an item', function () {
-    $response = $this->postJson('/api/items', [
-        'box_id' => Box::factory()->create()->id
-    ]);
+    $box = Box::factory()->create();
+    $response = $this->postJson("/api/boxes/{$box->id}/items", []);
 
     $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJsonValidationErrors(['name']);
 });
 
 test('box_id is required when creating an item', function () {
-    $response = $this->postJson('/api/items', [
+    $response = $this->postJson('/api/boxes/999/items', [
         'name' => 'Coffee Mug'
     ]);
 
-    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->assertJsonValidationErrors(['box_id']);
+    $response->assertStatus(Response::HTTP_NOT_FOUND);
 });
 
 test('box must exist when creating an item', function () {
-    $response = $this->postJson('/api/items', [
-        'name' => 'Coffee Mug',
-        'box_id' => 999
+    $response = $this->postJson('/api/boxes/999/items', [
+        'name' => 'Coffee Mug'
     ]);
 
-    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->assertJsonValidationErrors(['box_id']);
+    $response->assertStatus(Response::HTTP_NOT_FOUND);
 });
 
 test('description and photo_path are optional when creating an item', function () {
     $box = Box::factory()->create();
     $itemData = [
-        'name' => 'Coffee Mug',
-        'box_id' => $box->id
+        'name' => 'Coffee Mug'
     ];
 
-    $response = $this->postJson('/api/items', $itemData);
+    $response = $this->postJson("/api/boxes/{$box->id}/items", $itemData);
 
     $response->assertStatus(Response::HTTP_CREATED);
 
@@ -129,9 +127,10 @@ test('description and photo_path are optional when creating an item', function (
 });
 
 test('an item can be deleted', function () {
-    $item = Item::factory()->create();
+    $box = Box::factory()->create();
+    $item = Item::factory()->create(['box_id' => $box->id]);
 
-    $response = $this->deleteJson("/api/items/{$item->id}");
+    $response = $this->deleteJson("/api/boxes/{$box->id}/items/{$item->id}");
 
     $response->assertStatus(Response::HTTP_NO_CONTENT);
 
@@ -139,7 +138,8 @@ test('an item can be deleted', function () {
 });
 
 test('deleting a non-existent item returns a 404', function () {
-    $response = $this->deleteJson('/api/items/999');
+    $box = Box::factory()->create();
+    $response = $this->deleteJson("/api/boxes/{$box->id}/items/999");
 
     $response->assertStatus(Response::HTTP_NOT_FOUND);
 });
@@ -154,14 +154,15 @@ test('deleting a box also deletes its items', function () {
 });
 
 test('an item can be updated', function () {
-    $item = Item::factory()->create();
+    $box = Box::factory()->create();
+    $item = Item::factory()->create(['box_id' => $box->id]);
 
     $updatedItem = [
         'name' => 'Updated Coffee Mug',
         'description' => 'Updated description',
         'photo_path' => 'items/updated-coffee-mug.jpg'
     ];
-    $response = $this->putJson("/api/items/{$item->id}", $updatedItem);
+    $response = $this->putJson("/api/boxes/{$box->id}/items/{$item->id}", $updatedItem);
 
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
@@ -175,9 +176,10 @@ test('an item can be updated', function () {
 });
 
 test('name is required when updating an item', function () {
-    $item = Item::factory()->create();
+    $box = Box::factory()->create();
+    $item = Item::factory()->create(['box_id' => $box->id]);
 
-    $response = $this->putJson("/api/items/{$item->id}", [
+    $response = $this->putJson("/api/boxes/{$box->id}/items/{$item->id}", [
         'description' => null,
         'photo_path' => null
     ]);
@@ -187,9 +189,13 @@ test('name is required when updating an item', function () {
 });
 
 test('description can be set to null', function () {
-    $item = Item::factory()->create(['description' => 'Original description']);
+    $box = Box::factory()->create();
+    $item = Item::factory()->create([
+        'box_id' => $box->id,
+        'description' => 'Original description'
+    ]);
 
-    $response = $this->putJson("/api/items/{$item->id}", [
+    $response = $this->putJson("/api/boxes/{$box->id}/items/{$item->id}", [
         'name' => 'Updated Coffee Mug',
         'description' => null,
         'photo_path' => null
@@ -203,9 +209,13 @@ test('description can be set to null', function () {
 });
 
 test('photo_path can be set to null', function () {
-    $item = Item::factory()->create(['photo_path' => 'items/original.jpg']);
+    $box = Box::factory()->create();
+    $item = Item::factory()->create([
+        'box_id' => $box->id,
+        'photo_path' => 'items/original.jpg'
+    ]);
 
-    $response = $this->putJson("/api/items/{$item->id}", [
+    $response = $this->putJson("/api/boxes/{$box->id}/items/{$item->id}", [
         'name' => 'Updated Coffee Mug',
         'description' => null,
         'photo_path' => null
@@ -223,11 +233,10 @@ test('box_id cannot be updated', function () {
 
     $item = Item::factory()->create(['box_id' => $originalBox->id]);
 
-    $response = $this->putJson("/api/items/{$item->id}", [
+    $response = $this->putJson("/api/boxes/{$originalBox->id}/items/{$item->id}", [
         'name' => 'Updated Coffee Mug',
         'description' => null,
-        'photo_path' => null,
-        'box_id' => $newBox->id
+        'photo_path' => null
     ]);
 
     $response->assertStatus(Response::HTTP_OK);

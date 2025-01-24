@@ -24,7 +24,7 @@ const deleteItem = async () => {
     loading.value = true;
 
     try {
-        const response = await api.delete(`/api/items/${props.item.id}`);
+        const response = await api.delete(`/api/boxes/${props.item.box_id}/items/${props.item.id}`);
 
         if (!response.ok) {
             throw new Error('Failed to delete item');

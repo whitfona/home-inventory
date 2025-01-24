@@ -53,7 +53,7 @@ const resetForm = () => {
 
 const submitForm = async () => {
     try {
-        const response = await api.put(`/api/items/${props.item.id}`, form.value);
+        const response = await api.put(`/api/boxes/${props.item.box_id}/items/${props.item.id}`, form.value);
 
         if (!response.ok) {
             const data = await response.json();
