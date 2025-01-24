@@ -126,8 +126,11 @@ const submitForm = async () => {
                     <InputError :message="errors.location" class="mt-2" />
                 </div>
 
-                <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="$emit('close')" class="mr-3 border-indigo-400/30 text-indigo-300 hover:bg-gray-800/50">
+                <div class="mt-6 flex justify-end space-x-3">
+                    <SecondaryButton
+                        @click="$emit('close')"
+                        class="border-indigo-400/40 text-indigo-300 bg-gray-800/50 hover:bg-gray-900/70 hover:border-indigo-300/50 hover:text-indigo-200 transition-all duration-200 shadow-none hover:shadow-[0_0_25px_rgba(109,40,217,0.3)]"
+                    >
                         Cancel
                     </SecondaryButton>
 
@@ -139,4 +142,4 @@ const submitForm = async () => {
             </form>
         </div>
     </Modal>
-</template> 
+</template>
