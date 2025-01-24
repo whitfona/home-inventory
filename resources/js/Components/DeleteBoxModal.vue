@@ -45,7 +45,11 @@ const deleteBox = async () => {
 
             <div class="mt-4 space-y-4">
                 <p class="text-gray-300">
-                    Are you sure you want to delete <span class="font-semibold text-red-400">{{ box.name }}</span>? This action will permanently delete this box and all its items. This action cannot be undone.
+                    Are you sure you want to delete <span class="font-semibold text-red-400">{{ box.name }}</span>?
+                    <span class="block mt-2">
+                        This box contains <span class="font-semibold text-red-400">{{ box.items.length }} {{ box.items.length === 1 ? 'item' : 'items' }}</span>.
+                        This action will permanently delete this box and all its items. This action cannot be undone.
+                    </span>
                 </p>
 
                 <div class="mt-6 flex justify-end space-x-3">
