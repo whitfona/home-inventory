@@ -5,14 +5,13 @@ use App\Models\Item;
 use Illuminate\Http\Response;
 
 test('items can be retrieved', function () {
-    $box = Box::factory()->create();
-    $items = Item::factory()->count(3)->create(['box_id' => $box->id]);
+    $box = Box::factory()->hasItems(3)->create();
 
     $response = $this->getJson("/api/boxes/{$box->id}/items");
 
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
-            'data' => $items->map(fn ($item) => [
+            'data' => $box->items->map(fn ($item) => [
                 'id' => $item->id,
                 'name' => $item->name,
                 'description' => $item->description,
@@ -47,7 +46,7 @@ test('a single item can be retrieved', function () {
 test('getting a non-existent item returns a 404', function () {
     $box = Box::factory()->create();
     $response = $this->getJson("/api/boxes/{$box->id}/items/999");
-    
+
     $response->assertStatus(Response::HTTP_NOT_FOUND);
 });
 
@@ -127,10 +126,9 @@ test('description and photo_path are optional when creating an item', function (
 });
 
 test('an item can be deleted', function () {
-    $box = Box::factory()->create();
-    $item = Item::factory()->create(['box_id' => $box->id]);
+    $box = Box::factory()->hasItems(1)->create();
 
-    $response = $this->deleteJson("/api/boxes/{$box->id}/items/{$item->id}");
+    $response = $this->deleteJson("/api/boxes/{$box->id}/items/{$box->items->first()->id}");
 
     $response->assertStatus(Response::HTTP_NO_CONTENT);
 
@@ -145,8 +143,7 @@ test('deleting a non-existent item returns a 404', function () {
 });
 
 test('deleting a box also deletes its items', function () {
-    $box = Box::factory()->create();
-    Item::factory()->count(3)->create(['box_id' => $box->id]);
+    $box = Box::factory()->hasItems(3)->create();
 
     $box->delete();
 
@@ -176,10 +173,9 @@ test('an item can be updated', function () {
 });
 
 test('name is required when updating an item', function () {
-    $box = Box::factory()->create();
-    $item = Item::factory()->create(['box_id' => $box->id]);
+    $box = Box::factory()->hasItems(1)->create();
 
-    $response = $this->putJson("/api/boxes/{$box->id}/items/{$item->id}", [
+    $response = $this->putJson("/api/boxes/{$box->id}/items/{$box->items->first()->id}", [
         'description' => null,
         'photo_path' => null
     ]);

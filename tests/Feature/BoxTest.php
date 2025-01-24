@@ -168,8 +168,7 @@ test('deleting a non-existent box returns a 404', function () {
 });
 
 test('a box can have many items', function () {
-    $box = Box::factory()->create();
-    Item::factory()->count(3)->create(['box_id' => $box->id]);
+    $box = Box::factory()->hasItems(3)->create();
 
     expect($box->items)->toHaveCount(3)
         ->and($box->items->first())->toBeInstanceOf(Item::class);
