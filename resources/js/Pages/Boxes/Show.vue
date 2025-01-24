@@ -10,6 +10,7 @@ import TrashIcon from '@/Components/Icons/TrashIcon.vue';
 import { api } from '@/utils/api';
 import DeleteItemModal from '@/Components/DeleteItemModal.vue';
 import type { Box, Item } from '@/types';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 interface BoxResponse {
     data: Box;
@@ -146,12 +147,12 @@ onMounted(loadBox);
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="text-xl font-semibold text-indigo-300">Items in this Box</h4>
-                            <button
+                            <PrimaryButton
                                 @click="showNewItemModal = true"
-                                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-indigo-400 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 transition ease-in-out duration-150 shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:shadow-[0_0_25px_rgba(129,140,248,0.7)]"
+                                class="bg-[#9333EA] hover:bg-[#A855F7] focus:bg-[#A855F7] active:bg-[#7E22CE] shadow-[0_0_15px_rgba(147,51,234,0.5)] hover:shadow-[0_0_25px_rgba(168,85,247,0.7)] border-0"
                             >
                                 Add Item
-                            </button>
+                            </PrimaryButton>
                         </div>
 
                         <div v-if="box.data.items.length === 0" class="text-center py-8 text-indigo-300/70">
