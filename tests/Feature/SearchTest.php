@@ -31,85 +31,66 @@ test('it can search boxes and items', function () {
         'box_id' => $officeBox->id
     ]);
 
-    // Search for "kitchen" - should find the kitchen box and its items
+    // Search for "kitchen" - should find the kitchen box but no items
     $response = $this->withHeaders([
         'Accept' => 'application/json'
     ])->getJson('/api/search?q=kitchen');
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
             'data' => [
-                'boxes' => [
-                    [
-                        'id' => $kitchenBox->id,
-                        'name' => $kitchenBox->name,
-                        'description' => $kitchenBox->description,
-                        'location' => $kitchenBox->location,
-                        'created_at' => $kitchenBox->created_at->toJSON(),
-                        'updated_at' => $kitchenBox->updated_at->toJSON()
-                    ]
-                ],
-                'items' => [
-                    [
-                        'id' => $kitchenItem->id,
-                        'name' => $kitchenItem->name,
-                        'description' => $kitchenItem->description,
-                        'box_id' => $kitchenBox->id,
-                        'photo_path' => $kitchenItem->photo_path,
-                        'created_at' => $kitchenItem->created_at->toJSON(),
-                        'updated_at' => $kitchenItem->updated_at->toJSON()
-                    ]
+                [
+                    'id' => $kitchenBox->id,
+                    'name' => $kitchenBox->name,
+                    'description' => $kitchenBox->description,
+                    'location' => $kitchenBox->location,
+                    'items' => []
                 ]
             ]
         ]);
 
-    // Search for "stapler" - should find only the stapler item
+    // Search for "stapler" - should find the office box with the stapler item
     $response = $this->withHeaders([
         'Accept' => 'application/json'
     ])->getJson('/api/search?q=stapler');
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
             'data' => [
-                'boxes' => [],
-                'items' => [
-                    [
-                        'id' => $officeItem->id,
-                        'name' => $officeItem->name,
-                        'description' => $officeItem->description,
-                        'box_id' => $officeBox->id,
-                        'photo_path' => $officeItem->photo_path,
-                        'created_at' => $officeItem->created_at->toJSON(),
-                        'updated_at' => $officeItem->updated_at->toJSON()
+                [
+                    'id' => $officeBox->id,
+                    'name' => $officeBox->name,
+                    'description' => $officeBox->description,
+                    'location' => $officeBox->location,
+                    'items' => [
+                        [
+                            'id' => $officeItem->id,
+                            'name' => $officeItem->name,
+                            'description' => $officeItem->description,
+                            'box_id' => $officeBox->id,
+                        ]
                     ]
                 ]
             ]
         ]);
 
-    // Search for "office" - should find the office box and its items
+    // Search for "mug" - should find the kitchen box with the coffee mug item
     $response = $this->withHeaders([
         'Accept' => 'application/json'
-    ])->getJson('/api/search?q=office');
+    ])->getJson('/api/search?q=mug');
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
             'data' => [
-                'boxes' => [
-                    [
-                        'id' => $officeBox->id,
-                        'name' => $officeBox->name,
-                        'description' => $officeBox->description,
-                        'location' => $officeBox->location,
-                        'created_at' => $officeBox->created_at->toJSON(),
-                        'updated_at' => $officeBox->updated_at->toJSON()
-                    ]
-                ],
-                'items' => [
-                    [
-                        'id' => $officeItem->id,
-                        'name' => $officeItem->name,
-                        'description' => $officeItem->description,
-                        'box_id' => $officeBox->id,
-                        'photo_path' => $officeItem->photo_path,
-                        'created_at' => $officeItem->created_at->toJSON(),
-                        'updated_at' => $officeItem->updated_at->toJSON()
+                [
+                    'id' => $kitchenBox->id,
+                    'name' => $kitchenBox->name,
+                    'description' => $kitchenBox->description,
+                    'location' => $kitchenBox->location,
+                    'items' => [
+                        [
+                            'id' => $kitchenItem->id,
+                            'name' => $kitchenItem->name,
+                            'description' => $kitchenItem->description,
+                            'box_id' => $kitchenBox->id,
+                        ]
                     ]
                 ]
             ]
@@ -135,9 +116,6 @@ test('empty search returns empty results', function () {
     
     $response->assertStatus(Response::HTTP_OK)
         ->assertJson([
-            'data' => [
-                'boxes' => [],
-                'items' => []
-            ]
+            'data' => []
         ]);
 }); 

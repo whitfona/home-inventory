@@ -32,23 +32,9 @@ const searchItems = async () => {
   try {
     const response = await api.get(`/api/search?q=${encodeURIComponent(searchQuery.value)}`)
     const { data } = await response.json()
-      console.log('data', data)
-    boxes.value = data.boxes;
-    // Get unique boxes from search results
-    // const uniqueBoxes = new Map()
-    // data.forEach(result => {
-    //   if (!uniqueBoxes.has(result.box.id)) {
-    //     uniqueBoxes.set(result.box.id, {
-    //       ...result.box,
-    //       items: []
-    //     })
-    //   }
-    //   uniqueBoxes.get(result.box.id).items.push(result.item)
-    // })
-    //
-    // boxes.value = Array.from(uniqueBoxes.values())
+    boxes.value = data
   } catch (error) {
-    console.error('Error searching:', error)
+    console.error('Error searching items:', error)
   } finally {
     isSearching.value = false
   }

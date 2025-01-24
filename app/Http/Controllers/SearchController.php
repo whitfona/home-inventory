@@ -18,26 +18,23 @@ class SearchController extends Controller
         $query = $request->input('q');
 
         $boxes = Box::query()
-            ->where('name', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
-            ->orWhere('location', 'like', "%{$query}%")
-            ->get();
-
-        $boxIds = $boxes->pluck('id');
-
-        $items = Item::query()
             ->where(function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%")
+                    ->orWhere('location', 'like', "%{$query}%");
+            })
+            ->orWhereHas('items', function ($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
                     ->orWhere('description', 'like', "%{$query}%");
             })
-            ->orWhereIn('box_id', $boxIds)
+            ->with(['items' => function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%");
+            }])
             ->get();
 
         return response()->json([
-            'data' => [
-                'boxes' => $boxes,
-                'items' => $items
-            ]
+            'data' => $boxes
         ], Response::HTTP_OK);
     }
 }
