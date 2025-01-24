@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { Head, Link } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue'
 import NewBoxModal from '@/Components/NewBoxModal.vue'
@@ -13,12 +13,51 @@ const defaultBoxImage = '/images/packed-box.png'
 const showNewBoxModal = ref(false)
 const showDeleteBoxModal = ref(false)
 const boxToDelete = ref<Box | null>(null)
+const searchQuery = ref('')
+const isSearching = ref(false)
 
 const loadBoxes = async () => {
   const response = await api.get('/api/boxes')
   const data = await response.json()
   boxes.value = data.data
 }
+
+const searchItems = async () => {
+  if (!searchQuery.value.trim()) {
+    await loadBoxes()
+    return
+  }
+
+  isSearching.value = true
+  try {
+    const response = await api.get(`/api/search?q=${encodeURIComponent(searchQuery.value)}`)
+    const { data } = await response.json()
+      console.log('data', data)
+    boxes.value = data.boxes;
+    // Get unique boxes from search results
+    // const uniqueBoxes = new Map()
+    // data.forEach(result => {
+    //   if (!uniqueBoxes.has(result.box.id)) {
+    //     uniqueBoxes.set(result.box.id, {
+    //       ...result.box,
+    //       items: []
+    //     })
+    //   }
+    //   uniqueBoxes.get(result.box.id).items.push(result.item)
+    // })
+    //
+    // boxes.value = Array.from(uniqueBoxes.values())
+  } catch (error) {
+    console.error('Error searching:', error)
+  } finally {
+    isSearching.value = false
+  }
+}
+
+watch(searchQuery, () => {
+  const timeoutId = setTimeout(searchItems, 300)
+  return () => clearTimeout(timeoutId)
+})
 
 onMounted(loadBoxes)
 
@@ -59,6 +98,19 @@ const handleBoxDeleted = () => {
 
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <!-- Search Input -->
+        <div class="mb-6">
+          <input
+            v-model="searchQuery"
+            type="search"
+            placeholder="Search items..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+          >
+          <p v-if="isSearching" class="mt-2 text-sm text-gray-500">
+            Searching...
+          </p>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
             v-for="box in boxes"
