@@ -57,11 +57,11 @@ const loadBox = async () => {
     try {
         const response = await api.get(`/api/boxes/${props.id}`);
         const boxResponse = await response.json();
-        
+
         // Load items for the box
         const itemsResponse = await api.get(`/api/boxes/${props.id}/items`);
         const itemsData = await itemsResponse.json();
-        
+
         box.value = {
             data: {
                 ...boxResponse.data,
@@ -149,7 +149,6 @@ onMounted(loadBox);
                             <h4 class="text-xl font-semibold text-indigo-300">Items in this Box</h4>
                             <PrimaryButton
                                 @click="showNewItemModal = true"
-                                class="bg-[#9333EA] hover:bg-[#A855F7] focus:bg-[#A855F7] active:bg-[#7E22CE] shadow-[0_0_15px_rgba(147,51,234,0.5)] hover:shadow-[0_0_25px_rgba(168,85,247,0.7)] border-0"
                             >
                                 Add Item
                             </PrimaryButton>
