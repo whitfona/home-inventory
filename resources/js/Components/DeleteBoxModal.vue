@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useToast } from 'vue-toast-notification';
 import Modal from '@/Components/Modal.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
@@ -14,15 +13,12 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: [];
-    'box-deleted': [box: Box];
 }>();
 
-const toast = useToast();
 const loading = ref(false);
 
 const deleteBox = async () => {
     loading.value = true;
-
     try {
         const response = await api.delete(`/api/boxes/${props.box.id}`);
 
@@ -30,18 +26,10 @@ const deleteBox = async () => {
             throw new Error('Failed to delete box');
         }
 
-        emit('box-deleted', props.box);
         emit('close');
-        toast.success('Box deleted successfully', {
-            position: 'top',
-            duration: 3000,
-        });
+        window.location.reload();
     } catch (error) {
         console.error('Error deleting box:', error);
-        toast.error('Failed to delete box', {
-            position: 'top',
-            duration: 3000,
-        });
     } finally {
         loading.value = false;
     }
@@ -49,32 +37,35 @@ const deleteBox = async () => {
 </script>
 
 <template>
-    <Modal :show="show" @close="emit('close')" max-width="sm">
-        <div class="p-6">
-            <h2 class="text-lg font-medium text-gray-900">
+    <Modal :show="show" @close="$emit('close')">
+        <div class="p-6 bg-gray-900/90 backdrop-blur-sm border border-red-500/20">
+            <h2 class="text-lg font-medium text-red-400">
                 Delete Box
             </h2>
 
-            <p class="mt-3 text-sm text-gray-600">
-                Are you sure you want to delete "{{ box.name }}"?
-                <span v-if="box.items.length" class="font-medium text-red-600">
-                    This box contains {{ box.items.length }} item{{ box.items.length === 1 ? '' : 's' }}.
-                </span>
-                This action cannot be undone.
-            </p>
+            <div class="mt-4 space-y-4">
+                <p class="text-gray-300">
+                    Are you sure you want to delete <span class="font-semibold text-red-400">{{ box.name }}</span>? This action will permanently delete this box and all its items. This action cannot be undone.
+                </p>
 
-            <div class="mt-6 flex justify-end space-x-3">
-                <SecondaryButton @click="emit('close')">
-                    Cancel
-                </SecondaryButton>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <SecondaryButton 
+                        @click="$emit('close')" 
+                        class="border-red-400/30 text-red-300 hover:bg-gray-800/50"
+                    >
+                        Cancel
+                    </SecondaryButton>
 
-                <DangerButton
-                    @click="deleteBox"
-                    :class="{ 'opacity-25': loading }"
-                    :disabled="loading"
-                >
-                    Delete Box
-                </DangerButton>
+                    <DangerButton 
+                        @click="deleteBox" 
+                        :class="{ 'opacity-25': loading }" 
+                        :disabled="loading"
+                        class="bg-red-600 hover:bg-red-500 focus:bg-red-500 active:bg-red-700 shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:shadow-[0_0_25px_rgba(239,68,68,0.7)]"
+                    >
+                        <span v-if="loading">Deleting...</span>
+                        <span v-else>Delete Box</span>
+                    </DangerButton>
+                </div>
             </div>
         </div>
     </Modal>
