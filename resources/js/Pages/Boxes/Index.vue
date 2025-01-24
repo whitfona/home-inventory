@@ -70,19 +70,19 @@ const handleBoxDeleted = () => {
   <AppLayout>
     <template #header>
       <div class="flex justify-between items-center">
-        <h1 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h1 class="font-semibold text-xl text-indigo-300 leading-tight">
           Boxes
         </h1>
         <button
           @click="showNewBoxModal = true"
-          class="inline-flex items-center px-3 py-1.5 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+          class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-indigo-400 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 focus:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 transition ease-in-out duration-150 shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:shadow-[0_0_25px_rgba(129,140,248,0.7)]"
         >
           New Box
         </button>
       </div>
     </template>
 
-    <div class="py-12">
+    <div class="py-12 bg-gradient-to-b from-gray-900 to-black min-h-screen">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Search Input -->
         <div class="mb-6">
@@ -90,46 +90,48 @@ const handleBoxDeleted = () => {
             v-model="searchQuery"
             type="search"
             placeholder="Search items..."
-            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+            class="w-full px-4 py-3 bg-gray-900/50 border border-indigo-500/30 rounded-lg shadow-sm focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 text-indigo-100 placeholder-indigo-300/50 backdrop-blur-sm transition-all duration-200 hover:border-indigo-400/50 shadow-[0_0_10px_rgba(129,140,248,0.2)]"
           >
-          <p v-if="isSearching" class="mt-2 text-sm text-gray-500">
+          <p v-if="isSearching" class="mt-2 text-sm text-indigo-300">
             Searching...
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
             v-for="box in boxes"
             :key="box.id"
-            class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow duration-200 relative group"
+            class="bg-gray-900/70 overflow-hidden rounded-lg hover:shadow-[0_0_30px_rgba(129,140,248,0.3)] transition-all duration-300 relative group backdrop-blur-sm border border-indigo-500/20 hover:border-indigo-400/40 flex flex-col h-full"
           >
             <div class="absolute top-2 right-2 flex space-x-1 z-10">
               <button
-                class="p-2 rounded-full bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-50"
+                class="p-2 rounded-full bg-gray-900/80 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-900/80 border border-red-500/30 hover:border-red-400/50"
                 @click.prevent="confirmDelete(box)"
               >
-                <TrashIcon class="text-red-600" />
+                <TrashIcon class="text-red-400 hover:text-red-300" />
               </button>
             </div>
-            <Link :href="route('boxes.show', box.id)">
-              <div class="aspect-video bg-gray-100">
+            <Link :href="route('boxes.show', box.id)" class="block hover:scale-[1.02] transition-transform duration-300 flex-1 flex flex-col">
+              <div class="aspect-video bg-gray-800/50 relative overflow-hidden">
                 <img
                   :src="box.photo_path || defaultBoxImage"
                   :alt="box.name"
-                  class="w-full h-full object-contain"
+                  class="w-full h-full object-contain transform hover:scale-105 transition-transform duration-500"
                 >
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
               </div>
-              <div class="p-6">
-                <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600">{{ box.name }}</h2>
-                <p class="mt-1 text-xs text-gray-500">
+              <div class="p-6 flex-1 flex flex-col relative">
+                <h2 class="text-xl font-semibold text-indigo-300 hover:text-indigo-200 transition-colors duration-200">{{ box.name }}</h2>
+                <p class="mt-1 text-xs text-indigo-400/70">
                   <span class="font-semibold">Last updated:</span>
                   {{ new Date(box.updated_at).toLocaleDateString() }}
                 </p>
-                <p v-if="box.description" class="mt-2 text-gray-600">{{ box.description }}</p>
-                <p class="mt-2 text-gray-500">{{ box.location }}</p>
-                <p class="mt-2 text-sm text-gray-500">
+                <p v-if="box.description" class="mt-2 text-indigo-200/80">{{ box.description }}</p>
+                <p class="mt-2 text-indigo-300/70">{{ box.location }}</p>
+                <p class="mt-2 text-sm text-indigo-400/90">
                   {{ box.items.length }} item{{ box.items.length === 1 ? '' : 's' }}
                 </p>
+                <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-600/0 via-indigo-500/50 to-indigo-600/0"></div>
               </div>
             </Link>
           </div>
