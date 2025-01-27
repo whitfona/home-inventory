@@ -113,7 +113,7 @@ const handleBoxDeleted = () => {
                 <TrashIcon class="text-red-400 hover:text-red-300" />
               </button>
             </div>
-            <Link :href="route('boxes.show', box.id)" class="block hover:scale-[1.02] transition-transform duration-300 flex-1 flex flex-col">
+            <Link :href="route('boxes.show', box.id)" class="hover:scale-[1.02] transition-transform duration-300 flex-1 flex flex-col">
               <div class="aspect-video bg-gray-800/50 relative overflow-hidden">
                 <img
                   :src="box.photo_path || defaultBoxImage"
