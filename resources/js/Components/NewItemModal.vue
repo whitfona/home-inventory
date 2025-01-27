@@ -98,7 +98,7 @@ const submitForm = async () => {
 
                 <div>
                     <InputLabel for="description" value="Description" class="text-indigo-300" />
-                    <TextArea
+                    <textarea
                         id="description"
                         v-model="form.description"
                         class="mt-1 block w-full bg-gray-800/50 border-indigo-500/30 text-indigo-200 focus:border-indigo-400 focus:ring-indigo-400/50"
