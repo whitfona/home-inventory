@@ -50,7 +50,7 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                                class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 bg-gray-900/50 border border-indigo-500/30 rounded-lg focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 text-indigo-100 placeholder-indigo-300/50 backdrop-blur-sm transition-all duration-200 hover:border-indigo-400/50 shadow-[0_0_10px_rgba(129,140,248,0.2)]"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
