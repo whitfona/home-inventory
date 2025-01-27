@@ -51,7 +51,7 @@ onMounted(() => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" class="text-indigo-200/80" />
+                <InputLabel for="email" value="Email" />
 
                 <TextInput
                     id="email"
@@ -67,7 +67,7 @@ onMounted(() => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" class="text-indigo-200/80"  />
+                <InputLabel for="password" value="Password"  />
 
                 <TextInput
                     id="password"
