@@ -41,9 +41,9 @@ onMounted(() => {
     <GuestLayout>
         <Head title="Log in" />
 
-        <div class="mb-4 text-sm text-gray-600">
+        <h2 class="mb-4 text-2xl text-center font-bold text-indigo-300">
             Welcome to Home Inventory
-        </div>
+        </h2>
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
@@ -51,7 +51,7 @@ onMounted(() => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Email" class="text-indigo-200/80" />
 
                 <TextInput
                     id="email"
@@ -67,7 +67,7 @@ onMounted(() => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Password" class="text-indigo-200/80"  />
 
                 <TextInput
                     id="password"
@@ -84,7 +84,7 @@ onMounted(() => {
             <div class="block mt-4">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
+                    <span class="ms-2 text-sm text-indigo-200/80">Remember me</span>
                 </label>
             </div>
 
@@ -92,7 +92,7 @@ onMounted(() => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    class="underline text-sm text-indigo-200/80 hover:text-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                     Forgot your password?
                 </Link>
@@ -103,7 +103,7 @@ onMounted(() => {
             </div>
 
             <div class="mt-6 text-center">
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-indigo-300/70">
                     Don't have an account?
                     <Link
                         :href="route('register')"

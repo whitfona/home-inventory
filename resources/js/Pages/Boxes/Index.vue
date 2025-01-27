@@ -7,6 +7,7 @@ import { api } from '@/utils/api'
 import TrashIcon from '@/Components/Icons/TrashIcon.vue'
 import DeleteBoxModal from '@/Components/DeleteBoxModal.vue'
 import type { Box } from '@/types'
+import TextInput from "@/Components/TextInput.vue";
 
 const boxes = ref<Box[]>([])
 const defaultBoxImage = '/images/packed-box.png'
@@ -86,12 +87,13 @@ const handleBoxDeleted = () => {
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Search Input -->
         <div class="mb-6">
-          <input
-            v-model="searchQuery"
-            type="search"
-            placeholder="Search items..."
-            class="w-full px-4 py-3 bg-gray-900/50 border border-indigo-500/30 rounded-lg shadow-sm focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 text-indigo-100 placeholder-indigo-300/50 backdrop-blur-sm transition-all duration-200 hover:border-indigo-400/50 shadow-[0_0_10px_rgba(129,140,248,0.2)]"
-          >
+            <TextInput
+                id="search"
+                ref="searchInput"
+                type="text"
+                v-model="searchQuery"
+                placeholder="Search items..."
+            />
           <p v-if="isSearching" class="mt-2 text-sm text-indigo-300">
             Searching...
           </p>
