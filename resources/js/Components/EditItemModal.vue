@@ -38,19 +38,6 @@ watch(() => props.item, (newItem) => {
     };
 }, { immediate: true });
 
-const resetForm = () => {
-    form.value = {
-        name: props.item.name,
-        description: props.item.description || '',
-        photo_path: props.item.photo_path || ''
-    };
-    errors.value = {
-        name: '',
-        description: '',
-        photo_path: ''
-    };
-};
-
 const submitForm = async () => {
     try {
         const response = await api.put(`/api/boxes/${props.item.box_id}/items/${props.item.id}`, form.value);

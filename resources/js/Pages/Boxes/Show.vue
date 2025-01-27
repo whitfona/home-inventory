@@ -21,6 +21,8 @@ const props = defineProps<{
 }>();
 
 const box = ref<BoxResponse | null>(null);
+const defaultBoxImage = '/images/packed-box.png'
+const defaultItemImage = '/images/question-mark.png'
 const loading = ref(true);
 const showEditBoxModal = ref(false);
 const showNewItemModal = ref(false);
@@ -29,23 +31,9 @@ const showDeleteItemModal = ref(false);
 const selectedItem = ref<Item | null>(null);
 const itemToDelete = ref<Item | null>(null);
 
-const pageTitle = computed(() => {
-    return box.value ? `${box.value.data.name} - Box Details` : 'Loading...';
-});
-
-const getItemPhotoPath = (photoPath: string | null) => {
-    if (!photoPath) return '/images/default-item.svg';
-    return `/images/${photoPath}`;
-};
-
 const editItem = (item: Item) => {
     selectedItem.value = item;
     showEditItemModal.value = true;
-};
-
-const closeEditModal = () => {
-    showEditItemModal.value = false;
-    selectedItem.value = null;
 };
 
 const confirmDelete = (item: Item) => {
@@ -137,8 +125,8 @@ onMounted(loadBox);
                                     {{ box.data.description || 'No description provided' }}
                                 </p>
                             </div>
-                            <div v-if="box.data.photo_path" class="flex justify-center items-center">
-                                <img :src="getItemPhotoPath(box.data.photo_path)" :alt="box.data.name" class="max-h-48 object-contain rounded-lg shadow-[0_0_20px_rgba(129,140,248,0.2)]">
+                            <div class="flex justify-center items-center">
+                                <img :src="box.data.photo_path || defaultBoxImage" :alt="box.data.name" class="max-h-48 object-contain rounded-lg shadow-[0_0_20px_rgba(129,140,248,0.2)]">
                             </div>
                         </div>
                     </div>
@@ -176,7 +164,7 @@ onMounted(loadBox);
                                 </div>
                                 <div class="flex items-start space-x-4">
                                     <div class="flex-shrink-0">
-                                        <img :src="getItemPhotoPath(item.photo_path)" :alt="item.name" class="h-20 w-20 object-cover rounded shadow-[0_0_15px_rgba(129,140,248,0.15)]">
+                                        <img :src="item.photo_path || defaultItemImage" :alt="item.name" class="h-20 w-20 object-cover rounded shadow-[0_0_15px_rgba(129,140,248,0.15)]">
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-lg font-medium text-indigo-300 truncate">{{ item.name }}</p>
