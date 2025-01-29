@@ -38,7 +38,7 @@ const deleteBox = async () => {
 
 <template>
     <Modal :show="show" @close="$emit('close')">
-        <div class="p-6 bg-gray-900/90 backdrop-blur-sm border border-red-500/20">
+        <div class="p-6 bg-background/90 backdrop-blur-sm border border-red-500/20">
             <h2 class="text-lg font-medium text-red-400">
                 Delete Box
             </h2>
@@ -53,16 +53,16 @@ const deleteBox = async () => {
                 </p>
 
                 <div class="mt-6 flex justify-end space-x-3">
-                    <SecondaryButton 
-                        @click="$emit('close')" 
-                        class="border-red-400/30 text-red-300 hover:bg-gray-800/50"
+                    <SecondaryButton
+                        @click="$emit('close')"
+                        class="border-red-400/30 text-red-300 hover:bg-background-hover/50"
                     >
                         Cancel
                     </SecondaryButton>
 
-                    <DangerButton 
-                        @click="deleteBox" 
-                        :class="{ 'opacity-25': loading }" 
+                    <DangerButton
+                        @click="deleteBox"
+                        :class="{ 'opacity-25': loading }"
                         :disabled="loading"
                         class="bg-red-600 hover:bg-red-500 focus:bg-red-500 active:bg-red-700 shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:shadow-[0_0_25px_rgba(239,68,68,0.7)]"
                     >

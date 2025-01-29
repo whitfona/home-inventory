@@ -14,7 +14,7 @@ const showingNavigationDropdown = ref(false);
     <div>
         <div class="min-h-screen bg-gray-100">
             <nav
-                class="border-b border-gray-100 bg-gray-900"
+                class="border-b border-gray-100 bg-background"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -50,7 +50,7 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 bg-gray-900/50 border border-indigo-500/30 rounded-lg focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 text-indigo-100 placeholder-indigo-300/50 backdrop-blur-sm transition-all duration-200 hover:border-indigo-400/50 shadow-[0_0_10px_rgba(129,140,248,0.2)]"
+                                                class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 bg-background/50 border border-border/30 rounded-lg focus:border-secondary focus:ring-1 focus:ring-secondary text-light placeholder-primary/50 backdrop-blur-sm transition-all duration-200 hover:border-secondary/50 shadow-[0_0_10px_rgba(129,140,248,0.2)]"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -154,11 +154,11 @@ const showingNavigationDropdown = ref(false);
                     >
                         <div class="px-4">
                             <div
-                                class="text-base font-medium text-indigo-200/80"
+                                class="text-base font-medium text-tertiary/80"
                             >
                                 {{ $page.props.auth.user.name }}
                             </div>
-                            <div class="text-sm font-medium text-indigo-300/70">
+                            <div class="text-sm font-medium text-primary/70">
                                 {{ $page.props.auth.user.email }}
                             </div>
                         </div>
@@ -181,7 +181,7 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Heading -->
             <header
-                class="bg-gray-900 "
+                class="bg-background "
                 v-if="$slots.header"
             >
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

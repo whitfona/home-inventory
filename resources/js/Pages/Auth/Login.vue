@@ -41,7 +41,7 @@ onMounted(() => {
     <GuestLayout>
         <Head title="Log in" />
 
-        <h2 class="mb-4 text-2xl text-center font-bold text-indigo-300">
+        <h2 class="mb-4 text-2xl text-center font-bold text-primary">
             Welcome to Home Inventory
         </h2>
 
@@ -84,7 +84,7 @@ onMounted(() => {
             <div class="block mt-4">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-indigo-200/80">Remember me</span>
+                    <span class="ms-2 text-sm text-tertiary/80">Remember me</span>
                 </label>
             </div>
 
@@ -92,7 +92,7 @@ onMounted(() => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="underline text-sm text-indigo-200/80 hover:text-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    class="underline text-sm text-tertiary/80 hover:text-tertiary rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-border"
                 >
                     Forgot your password?
                 </Link>
@@ -103,11 +103,11 @@ onMounted(() => {
             </div>
 
             <div class="mt-6 text-center">
-                <p class="text-sm text-indigo-300/70">
+                <p class="text-sm text-primary/70">
                     Don't have an account?
                     <Link
                         :href="route('register')"
-                        class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="font-medium text-indigo-600 hover:text-border focus:outline-none focus:ring-2 focus:ring-border focus:ring-offset-2"
                     >
                         Sign up now
                     </Link>

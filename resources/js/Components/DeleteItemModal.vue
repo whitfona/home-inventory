@@ -50,17 +50,17 @@ const deleteItem = async () => {
 
 <template>
     <Modal :show="show" @close="$emit('close')">
-        <div class="p-6 bg-gray-900/90 backdrop-blur-sm border border-red-500/20">
+        <div class="p-6 bg-background/90 backdrop-blur-sm border border-red-500/20">
             <h2 class="text-lg font-medium text-red-400">
                 Delete Item
             </h2>
 
-            <p class="mt-3 text-sm text-indigo-300">
+            <p class="mt-3 text-sm text-primary">
                 Are you sure you want to delete "{{ item.name }}"? This action cannot be undone.
             </p>
 
             <div class="mt-6 flex justify-end">
-                <SecondaryButton @click="$emit('close')" class="mr-3 border-indigo-400/30 text-indigo-300 hover:bg-gray-800/50">
+                <SecondaryButton @click="$emit('close')" class="mr-3 border-secondary/30 text-primary hover:bg-background-hover/50">
                     Cancel
                 </SecondaryButton>
 

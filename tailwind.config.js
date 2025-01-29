@@ -26,7 +26,7 @@ export default {
                 light: 'rgba(var(--light))',
                 dark: 'rgba(var(--dark))',
 
-                background: 'rgba(var(--background)',
+                background: 'rgba(var(--background))',
                 'background-hover': 'rgba(var(--background-hover))',
             },
         },

@@ -23,7 +23,7 @@ const submit = () => {
     <GuestLayout>
         <Head title="Forgot Password" />
 
-        <div class="mb-4 text-sm text-indigo-200/80">
+        <div class="mb-4 text-sm text-tertiary/80">
             Forgot your password? No problem. Just let us know your email
             address and we will email you a password reset link that will allow
             you to choose a new one.
@@ -38,7 +38,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" class="text-indigo-200/80" />
+                <InputLabel for="email" value="Email" class="text-tertiary/80" />
 
                 <TextInput
                     id="email"
