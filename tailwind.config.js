@@ -21,6 +21,7 @@ export default {
                 tertiary: 'rgba(var(--tertiary))',
 
                 cta: 'rgba(var(--cta))',
+                border: 'rgba(var(--border))',
 
                 light: 'rgba(var(--light))',
                 dark: 'rgba(var(--dark))',
