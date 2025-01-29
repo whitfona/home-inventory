@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --primary: 165, 180, 252; /* indigo-300 */
+    --secondary: 129, 140, 248; /* indigo-400 */
+    --tertiary: 199, 210, 254;
+
+    --cta: 147, 51, 234;
+
+    --light: 224, 231, 255; /* text-indigo-100 */
+    --dark: 0, 0, 0; /* black */
+
+    --background: 17, 24, 39; /* bg-gray-900 */
+    --background-hover: 31, 41, 55; /* bg-gray-800 */
+}
