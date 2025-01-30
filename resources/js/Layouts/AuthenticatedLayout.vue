@@ -12,9 +12,9 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-background">
             <nav
-                class="border-b border-gray-100 bg-background"
+                class="border-b border-background-hover"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -24,7 +24,7 @@ const showingNavigationDropdown = ref(false);
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-white"
+                                        class="block h-9 w-auto fill-current text-primary"
                                     />
                                 </Link>
                             </div>
@@ -50,7 +50,7 @@ const showingNavigationDropdown = ref(false);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 bg-background/50 border border-border/30 rounded-lg focus:border-secondary focus:ring-1 focus:ring-secondary text-light placeholder-primary/50 backdrop-blur-sm transition-all duration-200 hover:border-secondary/50 shadow-[0_0_10px_rgba(129,140,248,0.2)]"
+                                                class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 bg-background/50 border border-border/30 rounded-lg focus:border-secondary focus:ring-1 focus:ring-secondary text-primary placeholder-primary/50 backdrop-blur-sm transition-all duration-200 hover:border-secondary/50 shadow-[0_0_10px_rgba(129,140,248,0.2)]"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
