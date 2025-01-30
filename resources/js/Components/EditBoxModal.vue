@@ -96,7 +96,7 @@ const submitForm = async () => {
                         id="name"
                         type="text"
                         v-model="form.name"
-                        class="mt-1 block w-full bg-background-hover/50 border-border/30 text-tertiary focus:border-secondary focus:ring-secondary/50"
+                        class="mt-1"
                         required
                         autofocus
                     />
@@ -108,7 +108,7 @@ const submitForm = async () => {
                     <textarea
                         id="description"
                         v-model="form.description"
-                        class="mt-1 block w-full bg-background/50 border-border/30 text-tertiary focus:border-secondary focus:ring-secondary/50"
+                        class="mt-1 block w-full bg-background/50 border rounded-lg border-border/30 text-tertiary focus:border-secondary focus:ring-secondary/50"
                         rows="3"
                     />
                     <InputError :message="errors.description" class="mt-2" />
@@ -120,7 +120,7 @@ const submitForm = async () => {
                         id="location"
                         type="text"
                         v-model="form.location"
-                        class="mt-1 block w-full bg-background-hover/50 border-border/30 text-tertiary focus:border-secondary focus:ring-secondary/50"
+                        class="mt-1"
                         required
                     />
                     <InputError :message="errors.location" class="mt-2" />
