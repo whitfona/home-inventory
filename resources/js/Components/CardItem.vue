@@ -33,6 +33,12 @@ const handleItemDeleted = () => {
     emit('update')
 }
 
+const handleItemUpdated = () => {
+    showEditItemModal.value = false
+    selectedItem.value = null
+    emit('update')
+}
+
 </script>
 
 <template>
@@ -75,5 +81,6 @@ const handleItemDeleted = () => {
         :show="showEditItemModal"
         :item="selectedItem"
         @close="showEditItemModal = false; selectedItem = null;"
+        @item-updated="handleItemUpdated"
     />
 </template>

@@ -8,6 +8,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { api } from '@/utils/api';
 import type { Item } from '@/types';
+import {useToast} from "vue-toast-notification";
 
 const props = defineProps<{
     show: boolean;
@@ -16,7 +17,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     close: [];
+    'item-updated': [item: Item];
 }>();
+
+const toast = useToast()
 
 const form = ref({
     name: '',
@@ -29,6 +33,7 @@ const errors = ref({
     description: '',
     photo_path: ''
 });
+const loading = ref(false)
 
 watch(() => props.item, (newItem) => {
     form.value = {
@@ -40,6 +45,7 @@ watch(() => props.item, (newItem) => {
 
 const submitForm = async () => {
     try {
+        loading.value = true
         const response = await api.put(`/api/boxes/${props.item.box_id}/items/${props.item.id}`, form.value);
 
         if (!response.ok) {
@@ -51,10 +57,21 @@ const submitForm = async () => {
             throw new Error('Failed to update item');
         }
 
+        emit('item-updated', props.item);
         emit('close');
-        window.location.reload();
+
+        toast.success('Item updated successfully', {
+            position: 'top',
+            duration: 3000,
+        });
     } catch (error) {
         console.error('Error updating item:', error);
+        toast.error('Failed to update item', {
+            position: 'top',
+            duration: 3000,
+        });
+    } finally {
+        loading.value = false
     }
 };
 </script>
