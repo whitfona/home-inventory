@@ -82,7 +82,7 @@ const submitForm = async () => {
 
                 <div>
                     <InputLabel for="description" value="Description" class="text-primary" />
-                    <TextArea
+                    <textarea
                         id="description"
                         v-model="form.description"
                         class="mt-1 block w-full bg-background/50 border rounded-lg border-border/30 text-tertiary focus:border-secondary focus:ring-secondary/50"

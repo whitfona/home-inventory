@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { Head, Link } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue'
 import NewBoxModal from '@/Components/NewBoxModal.vue'
 import { api } from '@/utils/api'
-import TrashIcon from '@/Components/Icons/TrashIcon.vue'
-import DeleteBoxModal from '@/Components/DeleteBoxModal.vue'
 import type { Box } from '@/types'
 import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
