@@ -24,23 +24,38 @@ const toast = useToast();
 const form = ref({
     name: '',
     description: '',
-    photo_path: null as string | null
+    photo: null as Blob | null
 });
 
 const errors = ref({
     name: '',
     description: '',
-    photo_path: ''
+    photo: ''
 });
 
 const loading = ref(false);
 
+const handlePhotoChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+        const file = target.files[0];
+        form.value.photo = new Blob([file], { type: file.type });
+    }
+};
+
 const submitForm = async () => {
     loading.value = true;
-    errors.value = { name: '', description: '', photo_path: '' };
+    errors.value = { name: '', description: '', photo: '' };
 
     try {
-        const response = await api.post(`/api/boxes/${props.boxId}/items`, form.value);
+        const formData = new FormData();
+        formData.append('name', form.value.name);
+        formData.append('description', form.value.description);
+        if (form.value.photo) {
+            formData.append('photo', form.value.photo);
+        }
+
+        const response = await api.post(`/api/boxes/${props.boxId}/items`, formData);
 
         if (!response.ok) {
             const data = await response.json();
@@ -56,7 +71,7 @@ const submitForm = async () => {
         form.value = {
             name: '',
             description: '',
-            photo_path: null
+            photo: null
         };
         emit('close');
         toast.success('Item added successfully', {
@@ -113,8 +128,8 @@ const submitForm = async () => {
                         type="file"
                         id="photo"
                         @change="handlePhotoChange"
-                        accept="image/*"
-                        class="mt-1 block w-full text-primary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-border file:cursor-pointer file:shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:file:shadow-[0_0_25px_rgba(129,140,248,0.7)]"
+                        accept="image/png, image/jpeg"
+                        class="mt-1 block w-full text-primary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-border file:cursor-pointer file:shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:file:shadow-[0_0_25px rgba(129,140,248,0.7)]"
                     />
                     <InputError :message="errors.photo" class="mt-2" />
                 </div>
@@ -124,7 +139,7 @@ const submitForm = async () => {
                         Cancel
                     </SecondaryButton>
 
-                    <PrimaryButton :class="{ 'opacity-25': loading }" :disabled="loading" class="bg-indigo-600 hover:bg-border focus:bg-border active:bg-indigo-700 shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:shadow-[0_0_25px_rgba(129,140,248,0.7)]">
+                    <PrimaryButton :class="{ 'opacity-25': loading }" :disabled="loading" class="bg-indigo-600 hover:bg-border focus:bg-border active:bg-indigo-700 shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:shadow-[0_0_25px rgba(129,140,248,0.7)]">
                         <span v-if="loading">Creating...</span>
                         <span v-else>Create Item</span>
                     </PrimaryButton>

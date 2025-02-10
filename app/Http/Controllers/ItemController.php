@@ -30,7 +30,14 @@ class ItemController extends Controller
 
     public function store(StoreItemRequest $request, Box $box)
     {
-        $item = $box->items()->create($request->validated());
+        $data = $request->validated();
+
+        // Handle file upload
+        if ($request->hasFile('photo')) {
+            $data['photo_path'] = $request->file('photo')->store('photos', 'public');
+        }
+
+        $item = $box->items()->create($data);
 
         return response()->json([
             'data' => $item

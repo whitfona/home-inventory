@@ -16,7 +16,7 @@ class StoreItemRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'photo_path' => ['nullable', 'string']
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png', 'max:2048']
         ];
     }
 }

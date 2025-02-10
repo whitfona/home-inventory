@@ -3,6 +3,8 @@
 use App\Models\Box;
 use App\Models\Item;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 test('items can be retrieved', function () {
     $box = Box::factory()->hasItems(3)->create();
@@ -54,6 +56,11 @@ test('an item can be stored', function () {
     $box = Box::factory()->create();
     $itemData = Item::factory()->raw(['box_id' => $box->id]);
 
+    Storage::fake('public');
+    // Create a fake image file for testing
+    $file = UploadedFile::fake()->image('test-image.jpg', 600, 400);
+    $itemData['photo'] = $file;
+
     $response = $this->postJson("/api/boxes/{$box->id}/items", $itemData);
 
     $response->assertStatus(Response::HTTP_CREATED)
@@ -61,17 +68,19 @@ test('an item can be stored', function () {
             'data' => [
                 'name' => $itemData['name'],
                 'description' => $itemData['description'],
-                'photo_path' => $itemData['photo_path'],
                 'box_id' => $box->id
             ]
         ]);
+
+    // Check that the file was stored
+    $this->assertTrue(Storage::disk('public')->exists('photos/' . $file->hashName()));
 
     $item = Item::first();
 
     expect($item)
         ->name->toBe($itemData['name'])
         ->description->toBe($itemData['description'])
-        ->photo_path->toBe($itemData['photo_path'])
+        ->photo_path->toBe('photos/' . $file->hashName()) // Check the stored path
         ->box_id->toBe($box->id)
         ->id->toBeInt()
         ->created_at->not->toBeNull()

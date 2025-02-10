@@ -16,4 +16,4 @@ class ItemFactory extends Factory
             'box_id' => Box::factory()
         ];
     }
-} 
+}
