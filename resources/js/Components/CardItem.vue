@@ -11,7 +11,7 @@ defineProps<{ items: Item[] }>()
 
 const emit = defineEmits(['update'])
 
-const defaultItemImage = '/images/question-mark.png'
+const defaultItemImage = 'photos/question-mark.png'
 const selectedItem = ref<Item | null>(null)
 const showEditItemModal = ref(false)
 const itemToDelete = ref<Item | null>(null)
@@ -59,7 +59,7 @@ const handleItemUpdated = () => {
         </div>
         <div class="flex items-start space-x-4">
             <div class="flex-shrink-0">
-                <img :src="item.photo_path || defaultItemImage" :alt="item.name" class="h-20 w-20 object-cover rounded shadow-[0_0_15px_rgba(129,140,248,0.15)]">
+                <img :src="`/storage/${item.photo_path || defaultItemImage}`" :alt="item.name" class="h-20 w-20 object-cover rounded shadow-[0_0_15px_rgba(129,140,248,0.15)]">
             </div>
             <div class="flex-1 min-w-0">
                 <p class="text-lg font-medium text-primary truncate">{{ item.name }}</p>
