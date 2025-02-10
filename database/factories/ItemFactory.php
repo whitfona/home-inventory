@@ -12,7 +12,7 @@ class ItemFactory extends Factory
         return [
             'name' => fake()->words(3, true),
             'description' => fake()->sentence(),
-            'photo_path' => fake()->optional()->filePath(),
+            'photo_path' => null,
             'box_id' => Box::factory()
         ];
     }
