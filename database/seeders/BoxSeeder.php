@@ -14,7 +14,7 @@ class BoxSeeder extends Seeder
             ->create([
                 'name' => 'Nick',
                 'email' => 'nick@example.com',
-                'password' => 'password'
+                'password' => bcrypt('password'),
             ]);
 
         Box::factory()
