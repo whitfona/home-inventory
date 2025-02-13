@@ -9,7 +9,7 @@ defineProps<{ box: Box }>()
 const emit = defineEmits(['update'])
 const boxToDelete = ref<Box | null>(null)
 const showDeleteBoxModal = ref(false)
-const defaultBoxImage = '/images/packed-box.png'
+const defaultBoxImage = 'photos/question-mark.png'
 const confirmDelete = (box: Box) => {
     boxToDelete.value = box
     showDeleteBoxModal.value = true
@@ -38,7 +38,7 @@ const handleBoxDeleted = () => {
         <Link :href="route('boxes.show', box.id)" class="hover:scale-[1.02] transition-transform duration-300 flex-1 flex flex-col">
             <div class="aspect-video bg-background-hover/50 relative overflow-hidden">
                 <img
-                    :src="box.photo_path || defaultBoxImage"
+                    :src="`/storage/${box.photo_path || defaultBoxImage}`"
                     :alt="box.name"
                     class="w-full h-full object-contain transform hover:scale-105 transition-transform duration-500"
                 >

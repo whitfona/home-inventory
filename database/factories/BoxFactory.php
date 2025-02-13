@@ -13,6 +13,7 @@ class BoxFactory extends Factory
             'name' => fake()->words(2, true),
             'description' => fake()->sentence(),
             'location' => fake()->words(2, true),
+            'photo_path' => null
         ];
     }
 

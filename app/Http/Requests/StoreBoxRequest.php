@@ -17,6 +17,7 @@ class StoreBoxRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'location' => ['required', 'string', 'max:255'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png', 'max:2048']
         ];
     }
 }

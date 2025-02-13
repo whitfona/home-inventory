@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Box;
 use App\Http\Requests\StoreBoxRequest;
 use App\Http\Requests\UpdateBoxRequest;
+use App\Models\Box;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
 
 class BoxController extends Controller
 {
@@ -28,7 +27,14 @@ class BoxController extends Controller
 
     public function store(StoreBoxRequest $request)
     {
-        $box = Box::create($request->validated());
+        $data = $request->validated();
+
+        // Handle file upload
+        if ($request->hasFile('photo')) {
+            $data['photo_path'] = $request->file('photo')->store('photos', 'public');
+        }
+
+        $box = Box::create($data);
 
         return response()->json([
             'data' => $box

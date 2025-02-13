@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {onMounted, ref} from 'vue';
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head} from '@inertiajs/vue3';
 import NewItemModal from '@/Components/NewItemModal.vue';
 import EditBoxModal from '@/Components/EditBoxModal.vue';
 import PencilIcon from '@/Components/Icons/PencilIcon.vue';
-import { api } from '@/utils/api';
-import type { Box, Item } from '@/types';
+import {api} from '@/utils/api';
+import type {Box} from '@/types';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import CardItem from "@/Components/CardItem.vue";
 
@@ -19,7 +19,7 @@ const props = defineProps<{
 }>();
 
 const box = ref<BoxResponse | null>(null);
-const defaultBoxImage = '/images/packed-box.png'
+const defaultBoxImage = 'photos/question-mark.png'
 const loading = ref(true);
 const showEditBoxModal = ref(false);
 const showNewItemModal = ref(false);
@@ -103,7 +103,11 @@ onMounted(loadBox);
                                 </p>
                             </div>
                             <div class="flex justify-center items-center">
-                                <img :src="box.data.photo_path || defaultBoxImage" :alt="box.data.name" class="max-h-48 object-contain rounded-lg shadow-[0_0_20px_rgba(129,140,248,0.2)]">
+                                <img
+                                    :src="`/storage/${box.data.photo_path || defaultBoxImage}`"
+                                    :alt="box.data.name"
+                                    class="max-h-48 object-contain rounded-lg shadow-[0_0_20px_rgba(129,140,248,0.2)]"
+                                >
                             </div>
                         </div>
                     </div>

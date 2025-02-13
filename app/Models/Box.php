@@ -13,7 +13,8 @@ class Box extends Model
     protected $fillable = [
         'name',
         'description',
-        'location'
+        'location',
+        'photo_path'
     ];
 
     public function items(): HasMany

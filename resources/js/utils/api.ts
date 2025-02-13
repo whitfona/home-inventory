@@ -10,14 +10,13 @@ export const api = {
 
     post: (url: string, data: any) => fetch(url, {
         method: 'POST',
-        // headers: defaultHeaders,
         body: data
     }),
 
     put: (url: string, data: any) => fetch(url, {
         method: 'PUT',
         headers: defaultHeaders,
-        body: JSON.stringify(data)
+        body: data
     }),
 
     delete: (url: string) => fetch(url, {
