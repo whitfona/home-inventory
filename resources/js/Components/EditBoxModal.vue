@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { useToast } from 'vue-toast-notification';
+import {ref} from 'vue';
+import {useToast} from 'vue-toast-notification';
 import Modal from '@/Components/Modal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { api } from '@/utils/api';
-import type { Box } from '@/types';
+import {api} from '@/utils/api';
+import type {Box} from '@/types';
 
 const props = defineProps<{
     show: boolean;
@@ -24,8 +24,8 @@ const toast = useToast();
 const form = ref({
     name: props.box.name,
     location: props.box.location,
-    description: props.box.description || '',
-    photo_path: props.box.photo_path || ''
+    description: props.box.description,
+    photo_path: props.box.photo_path
 });
 
 const errors = ref({
@@ -37,22 +37,12 @@ const errors = ref({
 
 const loading = ref(false);
 
-// Update form when box changes
-watch(() => props.box, (newBox) => {
-    form.value = {
-        name: newBox.name,
-        description: newBox.description || '',
-        location: newBox.location,
-        photo_path: newBox.photo_path || ''
-    };
-}, { immediate: true });
-
 const submitForm = async () => {
     loading.value = true;
     errors.value = { name: '', location: '', description: '', photo_path: '' };
 
     try {
-        const response = await api.put(`/api/boxes/${props.box.id}`, form.value);
+        const response = await api.put(`/api/boxes/${props.box.id}`, JSON.stringify(form.value));
 
         if (!response.ok) {
             const data = await response.json();
