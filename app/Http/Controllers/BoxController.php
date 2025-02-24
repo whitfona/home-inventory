@@ -43,7 +43,14 @@ class BoxController extends Controller
 
     public function update(UpdateBoxRequest $request, Box $box)
     {
-        $box->update($request->validated());
+        $data = $request->validated();
+
+        // Handle file upload
+        if ($request->hasFile('photo')) {
+            $data['photo_path'] = $request->file('photo')->store('photos', 'public');
+        }
+
+        $box->update($data);
 
         return response()->json([
             'data' => $box

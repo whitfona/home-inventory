@@ -25,24 +25,41 @@ const form = ref({
     name: props.box.name,
     location: props.box.location,
     description: props.box.description,
-    photo_path: props.box.photo_path
+    photo: null as Blob | null
 });
 
 const errors = ref({
     name: '',
     location: '',
     description: '',
-    photo_path: ''
+    photo: ''
 });
 
 const loading = ref(false);
 
+const handlePhotoChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+        const file = target.files[0];
+        form.value.photo = new Blob([file], { type: file.type });
+    }
+};
+
 const submitForm = async () => {
     loading.value = true;
-    errors.value = { name: '', location: '', description: '', photo_path: '' };
+    errors.value = { name: '', location: '', description: '', photo: '' };
 
     try {
-        const response = await api.put(`/api/boxes/${props.box.id}`, JSON.stringify(form.value));
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('name', form.value.name);
+        formData.append('description', form.value.description ?? '');
+        formData.append('location', form.value.location ?? '');
+        if (form.value.photo) {
+            formData.append('photo', form.value.photo);
+        }
+
+        const response = await api.post(`/api/boxes/${props.box.id}`, formData);
 
         if (!response.ok) {
             const data = await response.json();
@@ -90,7 +107,7 @@ const submitForm = async () => {
                         required
                         autofocus
                     />
-                    <InputError :message="errors.name" class="mt-2" />
+                    <InputError v-for="(errors, index) in errors.name" :message="errors" :key="index" class="mt-2" />
                 </div>
 
                 <div>
@@ -101,7 +118,7 @@ const submitForm = async () => {
                         class="mt-1 block w-full bg-background/50 border rounded-lg border-border/30 text-tertiary focus:border-secondary focus:ring-secondary/50"
                         rows="3"
                     />
-                    <InputError :message="errors.description" class="mt-2" />
+                    <InputError v-for="(errors, index) in errors.description" :message="errors" :key="index" class="mt-2" />
                 </div>
 
                 <div>
@@ -113,7 +130,19 @@ const submitForm = async () => {
                         class="mt-1"
                         required
                     />
-                    <InputError :message="errors.location" class="mt-2" />
+                    <InputError v-for="(errors, index) in errors.location" :message="errors" :key="index" class="mt-2" />
+                </div>
+
+                <div>
+                    <InputLabel for="photo" value="Photo" class="text-primary" />
+                    <input
+                        type="file"
+                        id="photo"
+                        @change="handlePhotoChange"
+                        accept="image/*"
+                        class="mt-1 block w-full text-primary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-border file:cursor-pointer file:shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:file:shadow-[0_0_25px_rgba(129,140,248,0.7)]"
+                    />
+                    <InputError v-for="(errors, index) in errors.photo" :message="errors" :key="index" class="mt-2" />
                 </div>
 
                 <div class="mt-6 flex justify-end space-x-3">
