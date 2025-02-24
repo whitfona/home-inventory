@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import {onMounted, ref, watch} from 'vue'
+import {Head} from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AuthenticatedLayout.vue'
 import NewBoxModal from '@/Components/NewBoxModal.vue'
-import { api } from '@/utils/api'
-import type { Box } from '@/types'
+import {api} from '@/utils/api'
+import type {Box} from '@/types'
 import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CardBox from "@/Components/CardBox.vue";
@@ -12,7 +12,6 @@ import CardBox from "@/Components/CardBox.vue";
 const boxes = ref<Box[]>([])
 const showNewBoxModal = ref(false)
 const searchQuery = ref('')
-const isSearching = ref(false)
 
 const loadBoxes = async () => {
   const response = await api.get('/api/boxes')
@@ -26,15 +25,12 @@ const searchItems = async () => {
     return
   }
 
-  isSearching.value = true
   try {
     const response = await api.get(`/api/search?q=${encodeURIComponent(searchQuery.value)}`)
     const { data } = await response.json()
     boxes.value = data
   } catch (error) {
     console.error('Error searching items:', error)
-  } finally {
-    isSearching.value = false
   }
 }
 
@@ -77,9 +73,6 @@ const handleBoxAdded = () => {
                 v-model="searchQuery"
                 placeholder="Search items..."
             />
-          <p v-if="isSearching" class="mt-2 text-sm text-primary">
-            Searching...
-          </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
