@@ -15,7 +15,9 @@ export const api = {
 
     put: (url: string, data: any) => fetch(url, {
         method: 'PUT',
-        headers: defaultHeaders,
+        headers: {
+            'Accept': 'application/json',
+        },
         body: data
     }),
 

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Box;
-use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Models\Box;
+use App\Models\Item;
 use Illuminate\Http\Response;
 
 class ItemController extends Controller
@@ -50,7 +50,13 @@ class ItemController extends Controller
             abort(404);
         }
 
-        $item->update($request->validated());
+        $data = $request->validated();
+
+        // Handle file upload
+        if ($request->hasFile('photo')) {
+            $data['photo_path'] = $request->file('photo')->store('photos', 'public');
+        }
+        $item->update($data);
 
         return response()->json([
             'data' => $item

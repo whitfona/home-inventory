@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import {ref} from 'vue';
 import Modal from '@/Components/Modal.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { api } from '@/utils/api';
-import type { Item } from '@/types';
+import {api} from '@/utils/api';
+import type {Item} from '@/types';
 import {useToast} from "vue-toast-notification";
 
 const props = defineProps<{
@@ -23,30 +23,38 @@ const emit = defineEmits<{
 const toast = useToast()
 
 const form = ref({
-    name: '',
-    description: '',
-    photo_path: ''
+    name: props.item.name,
+    description: props.item.description,
+    photo: null as Blob | null
 });
 
 const errors = ref({
     name: '',
     description: '',
-    photo_path: ''
+    photo: ''
 });
 const loading = ref(false)
 
-watch(() => props.item, (newItem) => {
-    form.value = {
-        name: newItem.name,
-        description: newItem.description || '',
-        photo_path: newItem.photo_path || ''
-    };
-}, { immediate: true });
+const handlePhotoChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+        const file = target.files[0];
+        form.value.photo = new Blob([file], { type: file.type });
+    }
+};
 
 const submitForm = async () => {
     try {
         loading.value = true
-        const response = await api.put(`/api/boxes/${props.item.box_id}/items/${props.item.id}`, form.value);
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('name', form.value.name);
+        formData.append('description', form.value.description ?? '');
+        if (form.value.photo) {
+            formData.append('photo', form.value.photo);
+        }
+
+        const response = await api.post(`/api/boxes/${props.item.box_id}/items/${props.item.id}`, formData);
 
         if (!response.ok) {
             const data = await response.json();
