@@ -102,7 +102,7 @@ const submitForm = async () => {
                         required
                         autofocus
                     />
-                    <InputError :message="errors.name" class="mt-2" />
+                    <InputError v-for="(errors, index) in errors.name" :message="errors" :key="index" class="mt-2" />
                 </div>
 
                 <div>
@@ -113,7 +113,7 @@ const submitForm = async () => {
                         class="mt-1 block w-full bg-background/50 border rounded-lg border-border/30 text-tertiary focus:border-secondary focus:ring-secondary/50"
                         rows="3"
                     />
-                    <InputError :message="errors.description" class="mt-2" />
+                    <InputError v-for="(errors, index) in errors.description" :message="errors" :key="index" class="mt-2" />
                 </div>
 
                 <div>
@@ -125,7 +125,7 @@ const submitForm = async () => {
                         accept="image/*"
                         class="mt-1 block w-full text-primary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-border file:cursor-pointer file:shadow-[0_0_15px_rgba(129,140,248,0.5)] hover:file:shadow-[0_0_25px_rgba(129,140,248,0.7)]"
                     />
-                    <InputError :message="errors.photo" class="mt-2" />
+                    <InputError v-for="(errors, index) in errors.photo" :message="errors" :key="index" class="mt-2" />
                 </div>
 
                 <div class="mt-6 flex justify-end">
